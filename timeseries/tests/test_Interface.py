@@ -4,7 +4,7 @@ import reprlib
 import numpy as np
 import collections
 
-#define a concrete SizedContainerTimeSeriesInterface
+#define a concrete class from SizedContainerTimeSeriesInterface
 class ConcreteSizedContainerTimeSeriesInterface(SizedContainerTimeSeriesInterface):
 
     def __init__(self, values, times=None):
@@ -53,15 +53,12 @@ def test_mean():
 def test_std():
     assert ts.std() == 0.5
 
-#test len(self)
 def test_len():
     assert len(ts) == 2
 
-#test getitem
 def test_getitem():
     assert ts[0] == (3, 1)
 
-#test contains
 def test_contains():
     nts = ConcreteSizedContainerTimeSeriesInterface(list(range(10)), list(range(1, 11)))
     assert (0 in nts) == True
@@ -79,10 +76,8 @@ def test_times():
 def test_items():
     assert ts.items() == [(3, 1), (4, 2)]
 
-#test str()
 def test_str():
     assert str(ts) == "ConcreteSizedContainerTimeSeriesInterface([(3, 1), (4, 2)]"
 
-#test repr()
 def test_repr():
     assert repr(ts) == "ConcreteSizedContainerTimeSeriesInterface([(3, 1), (4, 2)]), length=2"
