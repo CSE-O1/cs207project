@@ -77,7 +77,12 @@ def test_items():
     assert ts.items() == [(3, 1), (4, 2)]
 
 def test_str():
+    nts = ConcreteSizedContainerTimeSeriesInterface(list(range(100)), list(range(100)))
     assert str(ts) == "ConcreteSizedContainerTimeSeriesInterface([(3, 1), (4, 2)]"
+    assert str(nts) == "ConcreteSizedContainerTimeSeriesInterface([(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), ...]"
 
 def test_repr():
+    nts = ConcreteSizedContainerTimeSeriesInterface(list(range(100)), list(range(100)))
     assert repr(ts) == "ConcreteSizedContainerTimeSeriesInterface([(3, 1), (4, 2)]), length=2"
+    assert repr(nts) == "ConcreteSizedContainerTimeSeriesInterface([(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), ...]), length=100"
+
