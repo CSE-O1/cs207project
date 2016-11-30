@@ -1,9 +1,11 @@
-from Interface import StorageManagerInterface
+from SMInterface import StorageManagerInterface
 
 class FileStorageManager(StorageManagerInterface):
 
     def __init__(self):
-
+        """
+        Constructor of FileStorageManager
+        """
 
     def store(self, id, t):
         """

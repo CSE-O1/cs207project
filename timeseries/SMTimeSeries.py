@@ -1,4 +1,4 @@
-from Interface import SizedContainerTimeSeriesInterface
+from TSInterface import SizedContainerTimeSeriesInterface
 
 class SMTimeSeries(SizedContainerTimeSeriesInterface):
 
