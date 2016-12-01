@@ -5,6 +5,7 @@ TODO:
 3. 
 """
 import pickle
+from queue import Queue
 
 
 class Color(object):
@@ -41,16 +42,16 @@ class ValueRef(object):
 
     def store(self, storage):
         "store bytes for value to disk"
-        # called by BinaryNode.store_refs
+        # called by RedBlackNode.store_refs
         if self._referent is not None and not self._address:
             self.prepare_to_store(storage)
             self._address = storage.write(self.referent_to_bytes(self._referent))
 
 
-class BinaryNodeRef(ValueRef):
+class RedBlackNodeRef(ValueRef):
     "reference to a btree node on disk"
 
-    # calls the BinaryNode's store_refs
+    # calls the RedBlackNode's store_refs
     def prepare_to_store(self, storage):
         "have a node store its refs"
         if self._referent:
@@ -71,16 +72,16 @@ class BinaryNodeRef(ValueRef):
     def bytes_to_referent(string):
         "unpickle bytes to get a node object"
         d = pickle.loads(string)
-        return BinaryNode(
-            BinaryNodeRef(address=d['left']),
+        return RedBlackNode(
+            RedBlackNodeRef(address=d['left']),
             d['key'],
             ValueRef(address=d['value']),
-            BinaryNodeRef(address=d['right']),
+            RedBlackNodeRef(address=d['right']),
             ValueRef(address=d['color'])
         )
 
 
-class BinaryNode(object):
+class RedBlackNode(object):
     @classmethod
     def from_node(cls, node, **kwargs):
         "clone a node with some changes from another one"
@@ -102,8 +103,8 @@ class BinaryNode(object):
     def store_refs(self, storage):
         "method for a node to store all of its stuff"
         self.value_ref.store(storage)
-        # calls BinaryNodeRef.store. which calls
-        # BinaryNodeRef.prepate_to_store
+        # calls RedBlackNodeRef.store. which calls
+        # RedBlackNodeRef.prepate_to_store
         # which calls this again and recursively stores
         # the whole tree
         self.left_ref.store(storage)
@@ -113,17 +114,25 @@ class BinaryNode(object):
     def is_empty(self):
         return False
 
-    def is_black(self):
-        return self.color_ref == ValueRef(Color.BLACK)
+    def is_black(self, storage):
+        return self.color_ref.get(storage) == Color.BLACK
 
-    def is_red(self):
-        return self.color_ref == ValueRef(Color.RED)
+    def is_red(self, storage):
+        return self.color_ref.get(storage) == Color.RED
 
-    def blacken(self):
-        if self.is_red():
-            return BinaryNode.from_node(
+    def blacken(self, storage):
+        if self.is_red(storage):
+            return RedBlackNode.from_node(
                 self,
                 color_ref=ValueRef(Color.BLACK)
+            )
+        return self
+
+    def reden(self, storage):
+        if self.is_black(storage):
+            return RedBlackNode.from_node(
+                self,
+                color_ref=ValueRef(Color.RED)
             )
         return self
 
@@ -131,14 +140,14 @@ class BinaryNode(object):
         rchild = self.right_ref.get(storage)
         rlchild = rchild.left_ref.get(storage)
         rrchild = rchild.right_ref.get(storage)
-        return BinaryNode(
-            BinaryNode.from_node(
+        return RedBlackNode(
+            RedBlackNodeRef(RedBlackNode.from_node(
                 self,
-                right_ref=BinaryNodeRef(referent=EmptyNode().update(rlchild, storage))
-            ),
+                right_ref=RedBlackNodeRef(referent=RedBlackEmptyNode().update(rlchild, storage))
+            )),
             rchild.key,
             rchild.value_ref,
-            BinaryNodeRef(referent=rrchild),
+            RedBlackNodeRef(referent=rrchild),
             rchild.color_ref
         )
 
@@ -146,26 +155,34 @@ class BinaryNode(object):
         lchild = self.left_ref.get(storage)
         llchild = lchild.left_ref.get(storage)
         lrchild = lchild.right_ref.get(storage)
-        return BinaryNode(
-            BinaryNodeRef(referent=llchild),
+        return RedBlackNode(
+            RedBlackNodeRef(referent=llchild),
             lchild.key,
             lchild.value_ref,
-            BinaryNode.from_node(
+            RedBlackNodeRef(referent=RedBlackNode.from_node(
                 self,
-                left_ref=BinaryNodeRef(referent=EmptyNode().update(lrchild, storage)),
-            ),
+                left_ref=RedBlackNodeRef(referent=RedBlackEmptyNode().update(lrchild, storage)),
+            )),
             lchild.color_ref
         )
 
     def recolored(self, storage):
         lchild = self.left_ref.get(storage)
         rchild = self.right_ref.get(storage)
-        return BinaryNode.from_node(
-            self,
-            left_ref=BinaryNodeRef(referent=lchild.blacken()),
-            right_ref=BinaryNodeRef(referent=rchild.blacken()),
-            color_ref=ValueRef(Color.RED)
-        )
+        if self.is_black(storage):
+            return RedBlackNode.from_node(
+                self,
+                left_ref=RedBlackNodeRef(referent=lchild.blacken(storage)),
+                right_ref=RedBlackNodeRef(referent=rchild.blacken(storage)),
+                color_ref=ValueRef(Color.RED)
+            )
+        else:
+            return RedBlackNode.from_node(
+                self,
+                left_ref=RedBlackNodeRef(referent=lchild.reden(storage)),
+                right_ref=RedBlackNodeRef(referent=rchild.reden(storage)),
+                color_ref=ValueRef(Color.BLACK)
+            )
 
     def balance(self, storage):
         lchild = self.left_ref.get(storage)
@@ -174,59 +191,61 @@ class BinaryNode(object):
         lrchild = lchild.right_ref.get(storage)
         rlchild = rchild.left_ref.get(storage)
         rrchild = rchild.right_ref.get(storage)
-        if self.is_red():
+        if self.is_red(storage):
             return self
 
-        if lchild.is_red():
-            if rchild.is_red():
-                return self.recolored(storage)
-            if llchild.is_red():
+        if lchild.is_red(storage):
+            if rchild.is_red(storage):
+                if llchild.is_red(storage) or lrchild.is_red(storage) or lrchild.is_red(storage) or rrchild.is_red(storage):
+                    return self.recolored(storage)
+                return self
+            if llchild.is_red(storage):
                 return self.rotate_right(storage).recolored(storage)
-            if lrchild.is_red():
-                return BinaryNode.from_node(
+            if lrchild.is_red(storage):
+                return RedBlackNode.from_node(
                     self,
-                    left_ref=BinaryNodeRef(referent=lchild.rotate_left(storage))
+                    left_ref=RedBlackNodeRef(referent=lchild.rotate_left(storage))
                 ).rotate_right(storage).recolored(storage)
             return self
 
-        if rchild.is_red():
-            if rrchild.is_red():
+        if rchild.is_red(storage):
+            if rrchild.is_red(storage):
                 return self.rotate_left(storage).recolored(storage)
-            if rlchild.is_red():
-                return BinaryNode.from_node(
+            if rlchild.is_red(storage):
+                return RedBlackNode.from_node(
                     self,
-                    right_ref=BinaryNodeRef(referent=rchild.rotate_right(storage))
+                    right_ref=RedBlackNodeRef(referent=rchild.rotate_right(storage))
                 ).rotate_left(storage).recolored(storage)
         return self
 
     def update(self, node, storage):
         lchild = self.left_ref.get(storage)
         rchild = self.right_ref.get(storage)
-        if node.is_empty():
+        if node.key == "Invalid key":
             return self
         if node.key < self.key:
-            return BinaryNode.from_node(
+            return RedBlackNode.from_node(
                 self,
-                left_ref=BinaryNodeRef(referent=lchild.update(node, storage).balance(storage))
+                left_ref=RedBlackNodeRef(referent=lchild.update(node, storage).balance(storage))
             ).balance(storage)
-        return BinaryNode.from_node(
+        return RedBlackNode.from_node(
             self,
-            right_ref=BinaryNodeRef(referent=rchild.update(node, storage).balance(storage))
+            right_ref=RedBlackNodeRef(referent=rchild.update(node, storage).balance(storage))
         ).balance(storage)
 
     def insert(self, key, value_ref, storage):
         return self.update(
-            BinaryNode(
-                BinaryNodeRef(referent=EmptyNode()),
+            RedBlackNode(
+                RedBlackNodeRef(referent=RedBlackEmptyNode()),
                 key,
                 value_ref,
-                BinaryNodeRef(referent=EmptyNode()),
+                RedBlackNodeRef(referent=RedBlackEmptyNode()),
                 color_ref=ValueRef(Color.RED)
             ), storage
-        ).blacken()
+        ).blacken(storage)
 
 
-class EmptyNode(BinaryNode):
+class RedBlackEmptyNode(RedBlackNode):
 
     def __init__(self):
         self.color_ref = ValueRef(Color.BLACK)
@@ -237,14 +256,14 @@ class EmptyNode(BinaryNode):
         return True
 
     def get(self, storage):
-        return EmptyNode()
+        return RedBlackEmptyNode()
 
     def insert(self, key, value_ref, storage):
-        return BinaryNode(
-            BinaryNodeRef(referent=EmptyNode()),
+        return RedBlackNode(
+            RedBlackNodeRef(referent=RedBlackEmptyNode()),
             key,
             value_ref,
-            BinaryNodeRef(referent=EmptyNode()),
+            RedBlackNodeRef(referent=RedBlackEmptyNode()),
             color_ref=ValueRef(Color.BLACK)
         )
 
@@ -260,7 +279,7 @@ class EmptyNode(BinaryNode):
         return ValueRef()
 
 
-class BinaryTree(object):
+class RedBlackTree(object):
     "Immutable Binary Tree class. Constructs new tree on changes"
     def __init__(self, storage):
         self._storage = storage
@@ -268,14 +287,14 @@ class BinaryTree(object):
 
     def commit(self):
         "changes are final only when committed"
-        # triggers BinaryNodeRef.store
+        # triggers RedBlackNodeRef.store
         self._tree_ref.store(self._storage)
         # make sure address of new tree is stored
         self._storage.commit_root_address(self._tree_ref.address)
 
     def _refresh_tree_ref(self):
         "get reference to new tree if it has changed"
-        self._tree_ref = BinaryNodeRef(
+        self._tree_ref = RedBlackNodeRef(
             address=self._storage.get_root_address())
 
     def get(self, key):
@@ -285,6 +304,29 @@ class BinaryTree(object):
         # refresh the references and get new tree if needed
         if not self._storage.locked:
             self._refresh_tree_ref()
+
+        #BFS print to check the tree
+        # print("*****************")
+        # # node = self._follow(self._tree_ref)
+        # node = self._tree_ref.get(self._storage)
+        # q = Queue()
+        # q.put(node)
+        # #level = 1
+        # #print (q.empty())
+        # while not q.empty():
+        #     nd=q.get()
+        #     #print(nd)
+        #     #print ("level: ", level)
+        #     if nd==None:
+        #         print("None")
+        #     else:
+        #         print (nd.key)
+        #         print (self._follow(nd.color_ref))
+        #         if nd.key != "Invalid Key":
+        #             q.put(self._follow(nd.left_ref))
+        #             q.put(self._follow(nd.right_ref))
+        #
+        # print("*****************")
         # get the top level node
         node = self._follow(self._tree_ref)
         # traverse until you find appropriate node
@@ -313,56 +355,16 @@ class BinaryTree(object):
         "insert a new node creating a new path from root"
         # create a tree ifnthere was none so far
         if node is None:
-            new_node = EmptyNode().insert(key, value_ref, self._storage)
+            new_node = RedBlackEmptyNode().insert(key, value_ref, self._storage)
 
         else:
             new_node = node.insert(key, value_ref, self._storage)
 
-        return BinaryNodeRef(referent=new_node)
-
-    def delete(self, key):
-        "delete node with key, creating new tree and path"
-        if self._storage.lock():
-            self._refresh_tree_ref()
-        node = self._follow(self._tree_ref)
-        self._tree_ref = self._delete(node, key)
-
-    def _delete(self, node, key):
-        "underlying delete implementation"
-        if node is None:
-            raise KeyError
-        elif key < node.key:
-            new_node = BinaryNode.from_node(
-                node,
-                left_ref=self._delete(
-                    self._follow(node.left_ref), key))
-        elif key > node.key:
-            new_node = BinaryNode.from_node(
-                node,
-                right_ref=self._delete(
-                    self._follow(node.right_ref), key))
-        else:
-            left = self._follow(node.left_ref)
-            right = self._follow(node.right_ref)
-            if left and right:
-                replacement = self._find_max(left)
-                left_ref = self._delete(
-                    self._follow(node.left_ref), replacement.key)
-                new_node = BinaryNode(
-                    left_ref,
-                    replacement.key,
-                    replacement.value_ref,
-                    node.right_ref,
-                )
-            elif left:
-                return node.left_ref
-            else:
-                return node.right_ref
-        return BinaryNodeRef(referent=new_node)
+        return RedBlackNodeRef(referent=new_node)
 
     def _follow(self, ref):
         "get a node from a reference"
-        # calls BinaryNodeRef.get
+        # calls RedBlackNodeRef.get
         return ref.get(self._storage)
 
     def _find_max(self, node):

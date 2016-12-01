@@ -1,7 +1,7 @@
 import os
 import struct
 import portalocker
-from tree import BinaryTree
+from tree import RedBlackTree
 
 class Storage(object):
     SUPERBLOCK_SIZE = 4096
@@ -106,7 +106,7 @@ class DBDB(object):
 
     def __init__(self, f):
         self._storage = Storage(f)
-        self._tree = BinaryTree(self._storage)
+        self._tree = RedBlackTree(self._storage)
 
     def _assert_not_closed(self):
         if self._storage.closed:
@@ -139,3 +139,22 @@ def connect(dbname):
         fd = os.open(dbname, os.O_RDWR | os.O_CREAT)
         f = os.fdopen(fd, 'r+b')
     return DBDB(f)
+
+# os.remove("/tmp/test2.dbdb")
+# db = connect("/tmp/test2.dbdb")
+# db.set(2, "aged")
+# db.set(1, "gd")
+# db.set(4, "stillyoung")
+# db.set(5, "stillyoung")
+# db.set(9, "stillyoung")
+# db.set(3, "stillyoung")
+# db.set(6, "stillyoung")
+# db.set(7, "stillyoung")
+
+# # db.set(4, "ed")
+# # db.set(5, "lyoung")
+# # db.set(6, "illyoung")
+# db.commit()
+# db.close()
+# db = connect("/tmp/test2.dbdb")
+# print(db.get(1))
