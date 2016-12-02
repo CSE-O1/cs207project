@@ -21,12 +21,13 @@ size(self, id):
     Get the size of timeseries using the given ID, returning int size of the timeseries
 get(self, id):
     Get the timeseries using an given ID, returning the timeseries of the given ID
+
 """
 
-import numpy as np
 import os
+import numpy as np
 from SMInterface import StorageManagerInterface
-from cs207project.timeseries.ArrayTimeSeries import ArrayTimeSeries
+from timeseries.ArrayTimeSeries import ArrayTimeSeries
 
 
 class FileStorageManager(StorageManagerInterface):
@@ -48,14 +49,15 @@ class FileStorageManager(StorageManagerInterface):
         Get the size of timeseries using the given ID, returning int size of the timeseries
     get(self, id):
         Get the timeseries using an given ID, returning the timeseries of the given ID
+
     """
     def __init__(self):
         """
         Constructor of FileStorageManager
         """
         try:
-            self._id = np.load('data/id.npz')
-        except:
+            self._id = np.load('data/id.npy').tolist()
+        except FileNotFoundError:
             self._id = set()
 
     def gen_id(self):
@@ -64,8 +66,7 @@ class FileStorageManager(StorageManagerInterface):
         :return: ID of a timeseries
         """
         gid = 0
-        while gid in self._id:
-            gid += 1
+        while gid in self._id: gid += 1
         self._id.add(gid)
         return gid
 
@@ -89,7 +90,7 @@ class FileStorageManager(StorageManagerInterface):
         """
         np.save('data/ts.'+str(id), self.ts2nparray(t))
         self._id.add(id)
-        np.save('data/id.npz', self._id)
+        np.save('data/id.npy', self._id)
         return t
 
     def size(self, id):
@@ -100,9 +101,9 @@ class FileStorageManager(StorageManagerInterface):
         :return: size of the timeseries
         :rtype: int
         """
-        if not os.path.exists('data/ts.'+str(id)+'.npz'):
+        if not os.path.exists('data/ts.'+str(id)+'.npy'):
             raise ValueError("Timeseries with ID={0} does not exist.".format(id))
-        return len(np.load('data/ts.'+str(id)+'.npz')[0])
+        return len(np.load('data/ts.'+str(id)+'.npy')[0])
 
     def get(self, id):
         """
@@ -112,7 +113,7 @@ class FileStorageManager(StorageManagerInterface):
         :return: timeseries of the given ID
         :rtype: SizedContainerTimeSeriesInterface
         """
-        if not os.path.exists('data/ts.' + str(id) + '.npz'):
+        if not os.path.exists('data/ts.' + str(id) + '.npy'):
             raise ValueError("Timeseries with ID={0} does not exist.".format(id))
-        tsnparray = np.load('data/ts.' + str(id) + '.npz')
+        tsnparray = np.load('data/ts.' + str(id) + '.npy')
         return ArrayTimeSeries(tsnparray[1], tsnparray[0])
