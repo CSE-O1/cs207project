@@ -82,6 +82,8 @@ class RedBlackNodeRef(ValueRef):
 
 
 class RedBlackNode(object):
+    storage = 0
+
     @classmethod
     def from_node(cls, node, **kwargs):
         "clone a node with some changes from another one"
@@ -114,36 +116,36 @@ class RedBlackNode(object):
     def is_empty(self):
         return False
 
-    def is_black(self, storage):
-        return self.color_ref.get(storage) == Color.BLACK
+    def is_black(self):
+        return self._follow(self.color_ref) == Color.BLACK
 
-    def is_red(self, storage):
-        return self.color_ref.get(storage) == Color.RED
+    def is_red(self):
+        return self._follow(self.color_ref) == Color.RED
 
-    def blacken(self, storage):
-        if self.is_red(storage):
+    def blacken(self):
+        if self.is_red():
             return RedBlackNode.from_node(
                 self,
                 color_ref=ValueRef(Color.BLACK)
             )
         return self
 
-    def reden(self, storage):
-        if self.is_black(storage):
+    def reden(self):
+        if self.is_black():
             return RedBlackNode.from_node(
                 self,
                 color_ref=ValueRef(Color.RED)
             )
         return self
 
-    def rotate_left(self, storage):
-        rchild = self.right_ref.get(storage)
-        rlchild = rchild.left_ref.get(storage)
-        rrchild = rchild.right_ref.get(storage)
+    def rotate_left(self):
+        rchild = self._follow(self.right_ref)
+        rlchild = self._follow(rchild.left_ref)
+        rrchild = self._follow(rchild.right_ref)
         return RedBlackNode(
             RedBlackNodeRef(RedBlackNode.from_node(
                 self,
-                right_ref=RedBlackNodeRef(referent=RedBlackEmptyNode().update(rlchild, storage))
+                right_ref=RedBlackNodeRef(referent=RedBlackEmptyNode().update(rlchild))
             )),
             rchild.key,
             rchild.value_ref,
@@ -151,98 +153,102 @@ class RedBlackNode(object):
             rchild.color_ref
         )
 
-    def rotate_right(self, storage):
-        lchild = self.left_ref.get(storage)
-        llchild = lchild.left_ref.get(storage)
-        lrchild = lchild.right_ref.get(storage)
+    def rotate_right(self):
+        lchild = self._follow(self.left_ref)
+        llchild = self._follow(lchild.left_ref)
+        lrchild = self._follow(lchild.right_ref)
         return RedBlackNode(
             RedBlackNodeRef(referent=llchild),
             lchild.key,
             lchild.value_ref,
             RedBlackNodeRef(referent=RedBlackNode.from_node(
                 self,
-                left_ref=RedBlackNodeRef(referent=RedBlackEmptyNode().update(lrchild, storage)),
+                left_ref=RedBlackNodeRef(referent=RedBlackEmptyNode().update(lrchild)),
             )),
             lchild.color_ref
         )
 
-    def recolored(self, storage):
-        lchild = self.left_ref.get(storage)
-        rchild = self.right_ref.get(storage)
-        if self.is_black(storage):
+    def recolored(self):
+        lchild = self._follow(self.left_ref)
+        rchild = self._follow(self.right_ref)
+        if self.is_black():
             return RedBlackNode.from_node(
                 self,
-                left_ref=RedBlackNodeRef(referent=lchild.blacken(storage)),
-                right_ref=RedBlackNodeRef(referent=rchild.blacken(storage)),
+                left_ref=RedBlackNodeRef(referent=lchild.blacken()),
+                right_ref=RedBlackNodeRef(referent=rchild.blacken()),
                 color_ref=ValueRef(Color.RED)
             )
         else:
             return RedBlackNode.from_node(
                 self,
-                left_ref=RedBlackNodeRef(referent=lchild.reden(storage)),
-                right_ref=RedBlackNodeRef(referent=rchild.reden(storage)),
+                left_ref=RedBlackNodeRef(referent=lchild.reden()),
+                right_ref=RedBlackNodeRef(referent=rchild.reden()),
                 color_ref=ValueRef(Color.BLACK)
             )
 
-    def balance(self, storage):
-        lchild = self.left_ref.get(storage)
-        rchild = self.right_ref.get(storage)
-        llchild = lchild.left_ref.get(storage)
-        lrchild = lchild.right_ref.get(storage)
-        rlchild = rchild.left_ref.get(storage)
-        rrchild = rchild.right_ref.get(storage)
-        if self.is_red(storage):
+    def balance(self):
+        lchild = self._follow(self.left_ref)
+        rchild = self._follow(self.right_ref)
+        llchild = self._follow(lchild.left_ref)
+        lrchild = self._follow(lchild.right_ref)
+        rlchild = self._follow(rchild.left_ref)
+        rrchild = self._follow(rchild.right_ref)
+        if self.is_red():
             return self
 
-        if lchild.is_red(storage):
-            if rchild.is_red(storage):
-                if llchild.is_red(storage) or lrchild.is_red(storage) or lrchild.is_red(storage) or rrchild.is_red(storage):
-                    return self.recolored(storage)
+        if lchild.is_red():
+            if rchild.is_red():
+                if llchild.is_red() or lrchild.is_red() or lrchild.is_red() or rrchild.is_red():
+                    return self.recolored()
                 return self
-            if llchild.is_red(storage):
-                return self.rotate_right(storage).recolored(storage)
-            if lrchild.is_red(storage):
+            if llchild.is_red():
+                return self.rotate_right().recolored()
+            if lrchild.is_red():
                 return RedBlackNode.from_node(
                     self,
-                    left_ref=RedBlackNodeRef(referent=lchild.rotate_left(storage))
-                ).rotate_right(storage).recolored(storage)
+                    left_ref=RedBlackNodeRef(referent=lchild.rotate_left())
+                ).rotate_right().recolored()
             return self
 
-        if rchild.is_red(storage):
-            if rrchild.is_red(storage):
-                return self.rotate_left(storage).recolored(storage)
-            if rlchild.is_red(storage):
+        if rchild.is_red():
+            if rrchild.is_red():
+                return self.rotate_left().recolored()
+            if rlchild.is_red():
                 return RedBlackNode.from_node(
                     self,
-                    right_ref=RedBlackNodeRef(referent=rchild.rotate_right(storage))
-                ).rotate_left(storage).recolored(storage)
+                    right_ref=RedBlackNodeRef(referent=rchild.rotate_right())
+                ).rotate_left().recolored()
         return self
 
-    def update(self, node, storage):
-        lchild = self.left_ref.get(storage)
-        rchild = self.right_ref.get(storage)
+    def update(self, node):
+        lchild = self._follow(self.left_ref)
+        rchild = self._follow(self.right_ref)
         if node.key == "Invalid key":
             return self
         if node.key < self.key:
             return RedBlackNode.from_node(
                 self,
-                left_ref=RedBlackNodeRef(referent=lchild.update(node, storage).balance(storage))
-            ).balance(storage)
+                left_ref=RedBlackNodeRef(referent=lchild.update(node).balance())
+            ).balance()
         return RedBlackNode.from_node(
             self,
-            right_ref=RedBlackNodeRef(referent=rchild.update(node, storage).balance(storage))
-        ).balance(storage)
+            right_ref=RedBlackNodeRef(referent=rchild.update(node).balance())
+        ).balance()
 
-    def insert(self, key, value_ref, storage):
-        return self.update(
-            RedBlackNode(
-                RedBlackNodeRef(referent=RedBlackEmptyNode()),
-                key,
-                value_ref,
-                RedBlackNodeRef(referent=RedBlackEmptyNode()),
-                color_ref=ValueRef(Color.RED)
-            ), storage
-        ).blacken(storage)
+    def insert(self, key, value_ref):
+        return self.update(RedBlackNode(
+            RedBlackNodeRef(referent=RedBlackEmptyNode()),
+            key,
+            value_ref,
+            RedBlackNodeRef(referent=RedBlackEmptyNode()),
+            color_ref=ValueRef(Color.RED)
+        )).blacken()
+
+
+    def _follow(self, ref):
+        "get a node from a reference"
+        # calls RedBlackNodeRef.get
+        return ref.get(RedBlackNode.storage)
 
 
 class RedBlackEmptyNode(RedBlackNode):
@@ -255,10 +261,7 @@ class RedBlackEmptyNode(RedBlackNode):
     def is_empty(self):
         return True
 
-    def get(self, storage):
-        return RedBlackEmptyNode()
-
-    def insert(self, key, value_ref, storage):
+    def insert(self, key, value_ref):
         return RedBlackNode(
             RedBlackNodeRef(referent=RedBlackEmptyNode()),
             key,
@@ -267,7 +270,7 @@ class RedBlackEmptyNode(RedBlackNode):
             color_ref=ValueRef(Color.BLACK)
         )
 
-    def update(self, node, storage):
+    def update(self, node):
         return node
 
     @property
@@ -284,6 +287,7 @@ class RedBlackTree(object):
     def __init__(self, storage):
         self._storage = storage
         self._refresh_tree_ref()
+        RedBlackNode.storage = storage
 
     def commit(self):
         "changes are final only when committed"
@@ -355,10 +359,10 @@ class RedBlackTree(object):
         "insert a new node creating a new path from root"
         # create a tree ifnthere was none so far
         if node is None:
-            new_node = RedBlackEmptyNode().insert(key, value_ref, self._storage)
+            new_node = RedBlackEmptyNode().insert(key, value_ref)
 
         else:
-            new_node = node.insert(key, value_ref, self._storage)
+            new_node = node.insert(key, value_ref)
 
         return RedBlackNodeRef(referent=new_node)
 
