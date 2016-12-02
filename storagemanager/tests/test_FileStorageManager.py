@@ -23,8 +23,9 @@ test_multiple_ts():
 import numpy as np
 from os import system
 from pytest import raises
-from SMInterface import StorageManagerInterface
-from FileStorageManager import FileStorageManager
+from storagemanager.SMInterface import StorageManagerInterface
+from storagemanager.SMInterface import StorageManagerInterface
+from storagemanager.FileStorageManager import FileStorageManager
 from timeseries.ArrayTimeSeries import ArrayTimeSeries
 
 # clean up data folder

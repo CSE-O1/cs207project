@@ -76,8 +76,8 @@ __pos__(self):
 import collections
 import numpy as np
 import numbers
-from TSInterface import SizedContainerTimeSeriesInterface
-from ArrayTimeSeries import ArrayTimeSeries
+from timeseries.ArrayTimeSeries import ArrayTimeSeries
+from timeseries.TSInterface import SizedContainerTimeSeriesInterface
 from storagemanager.FileStorageManager import FileStorageManager
 
 

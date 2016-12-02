@@ -26,7 +26,7 @@ get(self, id):
 
 import os
 import numpy as np
-from SMInterface import StorageManagerInterface
+from storagemanager.SMInterface import StorageManagerInterface
 from timeseries.ArrayTimeSeries import ArrayTimeSeries
 
 

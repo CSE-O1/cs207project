@@ -1,12 +1,9 @@
-from TimeSeries import TimeSeries, check_length, LazyOperation
+from timeseries.TimeSeries import TimeSeries, check_length, LazyOperation
 from pytest import raises
 from math import sqrt
 
 """
 test function
-
-TODO:
-1. add more testcases;
 
 """
 #test class init with valid times and values input

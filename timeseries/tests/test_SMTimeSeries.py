@@ -31,8 +31,8 @@ test_pos():
 import numpy as np
 from os import system
 from pytest import raises
-from ArrayTimeSeries import ArrayTimeSeries
-from SMTimeSeries import SMTimeSeries
+from timeseries.ArrayTimeSeries import ArrayTimeSeries
+from timeseries.SMTimeSeries import SMTimeSeries
 from storagemanager.FileStorageManager import FileStorageManager
 
 
