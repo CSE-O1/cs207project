@@ -25,8 +25,8 @@ get(self, id):
 
 import numpy as np
 import os
-from SMInterface import StorageManagerInterface
-from cs207project.timeseries.ArrayTimeSeries import ArrayTimeSeries
+from storagemanager.SMInterface import StorageManagerInterface
+from timeseries.ArrayTimeSeries import ArrayTimeSeries
 
 
 class FileStorageManager(StorageManagerInterface):

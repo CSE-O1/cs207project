@@ -1,6 +1,6 @@
 import types
 import math
-from TSInterface import StreamTimeSeriesInterface
+from timeseries.TSInterface import StreamTimeSeriesInterface
 
 class SimulatedTimeSeries(StreamTimeSeriesInterface):
     """

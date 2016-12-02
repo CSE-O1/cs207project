@@ -3,9 +3,9 @@ import numbers
 import reprlib
 import collections
 import math
-from TimeSeries import TimeSeries
-from TSInterface import SizedContainerTimeSeriesInterface
-from Lazy import lazy, LazyOperation
+from timeseries.TimeSeries import TimeSeries
+from timeseries.TSInterface import SizedContainerTimeSeriesInterface
+from timeseries.Lazy import lazy, LazyOperation
 
 
 class ArrayTimeSeries(SizedContainerTimeSeriesInterface):

@@ -1,4 +1,4 @@
-from TSInterface import SizedContainerTimeSeriesInterface
+from timeseries.TSInterface import SizedContainerTimeSeriesInterface
 from pytest import raises
 import reprlib
 import numpy as np

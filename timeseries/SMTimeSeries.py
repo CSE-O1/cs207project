@@ -1,7 +1,7 @@
 import collections
 import numpy as np
 import numbers
-from TSInterface import SizedContainerTimeSeriesInterface
+from timeseries.TSInterface import SizedContainerTimeSeriesInterface
 from storagemanager.FileStorageManager import FileStorageManager
 from timeseries.ArrayTimeSeries import ArrayTimeSeries
 

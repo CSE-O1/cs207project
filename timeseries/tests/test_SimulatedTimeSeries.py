@@ -29,7 +29,7 @@ test_mean_std():
 from itertools import count
 from random import normalvariate, random
 from pytest import raises
-from SimulatedTimeSeries import SimulatedTimeSeries
+from timeseries.SimulatedTimeSeries import SimulatedTimeSeries
 import numpy as np
 from pytest import raises
 

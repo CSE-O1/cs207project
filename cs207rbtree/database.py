@@ -1,7 +1,7 @@
 import os
 import struct
 import portalocker
-from tree import BinaryTree
+from .tree import BinaryTree
 
 class Storage(object):
     SUPERBLOCK_SIZE = 4096

@@ -7,9 +7,9 @@ Methods
 
 import numpy as np
 from pytest import raises
-from SMInterface import StorageManagerInterface
-from FileStorageManager import FileStorageManager
-from cs207project.timeseries.ArrayTimeSeries import ArrayTimeSeries
+from storagemanager.SMInterface import StorageManagerInterface
+from storagemanager.FileStorageManager import FileStorageManager
+from timeseries.ArrayTimeSeries import ArrayTimeSeries
 
 
 def test_init():
