@@ -155,7 +155,7 @@ class RedBlackNodeRef(ValueRef):
 class RedBlackNode(object):
     """
     Binary node in a Red Black Tree
-    Node has a left_ref, right_ref, key, value_ref and a default color of RED.
+    Node has a left_ref, right_ref, key, value_ref and color.
     """
     storage = 0
 
@@ -181,7 +181,7 @@ class RedBlackNode(object):
         key: string
         value_ref: ValueRef containing string value referent
         right_ref: RedBlackNodeRef with key greater than this node's key
-        color: Color of Red Black Tree node, either RED or BLACK. Defaults to RED.
+        color: Color of Red Black Tree node, either RED or BLACK
 
         Returns:
         None
