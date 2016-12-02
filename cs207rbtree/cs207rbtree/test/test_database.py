@@ -1,8 +1,8 @@
 from pytest import raises
 import unittest
 import numpy as np
-from tree import ValueRef, RedBlackNodeRef, RedBlackNode, RedBlackTree, Color
-from database import Storage, DBDB, connect
+from cs207rbtree.tree import ValueRef, RedBlackNodeRef, RedBlackNode, RedBlackTree, Color
+from cs207rbtree.database import Storage, DBDB, connect
 import os
 import sys
 

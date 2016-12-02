@@ -1,10 +1,11 @@
 from pytest import raises
 import unittest
 import numpy as np
-from tree import ValueRef, RedBlackNodeRef, RedBlackNode,RedBlackEmptyNode, RedBlackTree, Color
-from database import Storage, DBDB, connect
+from cs207rbtree.tree import ValueRef, RedBlackNodeRef, RedBlackNode,RedBlackEmptyNode, RedBlackTree, Color
+from cs207rbtree.database import Storage, DBDB, connect
 import os
 import sys
+from queue import Queue
 
 # basic test to make sure red black tree functions well
 def test_basic():
@@ -239,5 +240,79 @@ def test__find_max_RedBlackTree():
     rbtree._find_max(root).key == '3'
     os.remove('test.dbdb')
 
+# check if the tree is a red black tree
+def test_red_black_tree():
+    db = connect('test.dbdb')
+    storage = db._storage
+    rbtree = RedBlackTree(storage)
+    rbtree.set(13, 'aaa')
+    rbtree.set(8, 'bbb')
+    rbtree.set(17, 'ccc')
+    rbtree.set(1, 'ddd')
+    rbtree.set(11, 'eee')
+    rbtree.set(6, 'fff')
+    rbtree.set(15, 'ggg')
+    rbtree.set(25, 'hhh')
+    rbtree.set(22, 'iii')
+    rbtree.set(27, 'jjj')
+    root = rbtree._follow(rbtree._tree_ref)
+    leftNode = root._follow(root.left_ref)
+    rightNode = root._follow(root.right_ref)
+    leftleftNode = leftNode._follow(leftNode.left_ref)
+    leftrightNode = leftNode._follow(leftNode.right_ref)
+    rightleftNode = rightNode._follow(rightNode.left_ref)
+    rightrightNode = rightNode._follow(rightNode.right_ref)
+    leftleftrightNode = leftleftNode._follow(leftleftNode.right_ref)
+    rightrightleftNode = rightrightNode._follow(rightrightNode.left_ref)
+    rightrightrightNode = rightrightNode._follow(rightrightNode.right_ref)
 
+    q = Queue()
+    q.put(root)
+    q.put(leftNode)
+    q.put(rightNode)
+    q.put(leftleftNode)
+    q.put(leftrightNode)
+    q.put(rightleftNode)
+    q.put(rightrightNode)
+    q.put(leftleftrightNode)
+    q.put(rightrightleftNode)
+    q.put(rightrightrightNode)
+
+    #level = 1
+    assert q.empty() == False
+    node1 = q.get()
+    assert node1.key == 13
+    assert node1._follow(node1.color_ref) == "black"
+    # level = 2
+    node2 = q.get()
+    assert node2.key == 8
+    assert node2._follow(node2.color_ref) == "red"
+    node3 = q.get()
+    assert node3.key == 17
+    assert node3._follow(node3.color_ref) == "red"
+    # level = 3
+    node4 = q.get()
+    assert node4.key == 1
+    assert node4._follow(node4.color_ref) == "black"
+    node5 = q.get()
+    assert node5.key == 11
+    assert node5._follow(node5.color_ref) == "black"
+    node6 = q.get()
+    assert node6.key == 15
+    assert node6._follow(node6.color_ref) == "black"
+    node7 = q.get()
+    assert node7.key == 25
+    assert node7._follow(node7.color_ref) == "black"
+    # level = 4
+    node8 = q.get()
+    assert node8.key == 6
+    assert node8._follow(node8.color_ref) == "red"
+    node9 = q.get()
+    assert node9.key == 22
+    assert node9._follow(node9.color_ref) == "red"
+    node10 = q.get()
+    assert node10.key == 27
+    assert node10._follow(node10.color_ref) == "red"
+
+    os.remove('test.dbdb')
 
