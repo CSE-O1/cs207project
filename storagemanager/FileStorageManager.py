@@ -26,6 +26,7 @@ get(self, id):
 
 import os
 import numpy as np
+import pickle
 from storagemanager.SMInterface import StorageManagerInterface
 from timeseries.ArrayTimeSeries import ArrayTimeSeries
 
@@ -56,7 +57,8 @@ class FileStorageManager(StorageManagerInterface):
         Constructor of FileStorageManager
         """
         try:
-            self._id = np.load('data/id.npy').tolist()
+            with open('data/id.pkl', 'rb') as f:
+                self._id = pickle.load(f)
         except FileNotFoundError:
             self._id = set()
 
@@ -90,7 +92,8 @@ class FileStorageManager(StorageManagerInterface):
         """
         np.save('data/ts.'+str(id), self.ts2nparray(t))
         self._id.add(id)
-        np.save('data/id.npy', self._id)
+        with open('data/id.pkl', 'wb') as f:
+            pickle.dump(self._id, f)
         return t
 
     def size(self, id):
