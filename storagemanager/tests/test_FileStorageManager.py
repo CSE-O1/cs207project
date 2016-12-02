@@ -27,7 +27,7 @@ from storagemanager.FileStorageManager import FileStorageManager
 from timeseries.ArrayTimeSeries import ArrayTimeSeries
 
 # clean up data folder
-os.system("rm ./data/*.npy")
+os.system("rm ./data/*")
 
 
 def test_init():
