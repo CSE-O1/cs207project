@@ -38,8 +38,8 @@ import os
 import struct
 import portalocker
 import os
-import ArrayTimeSeries as ts
-from TimeSeriesDistance import tsmaker, random_ts, stand, ccor, max_corr_at_phase, kernel_corr, kcorr_dist
+import timeseries.ArrayTimeSeries as ts
+from timeseries.TimeSeriesDistance import tsmaker, random_ts, stand, ccor, max_corr_at_phase, kernel_corr, kcorr_dist
 import numpy as np
 
 
@@ -622,7 +622,7 @@ def selectVPs(n = 20):
     VPDict = {}
     for i in range(n):
         VPfileName = 'ts_'+ str(VPindex[i]) +'.npy'
-        VPDB = 'VPDB'+ str(i + 1) + '.dbdb'
+        VPDB = 'data2/VPDB'+ str(i + 1) + '.dbdb'
         VPDict[i+1] =  (VPfileName, VPDB)
     return VPDict
 
@@ -679,11 +679,12 @@ class VantagePointDB(DBDB):
         folderPath: folder that contains the n timeseries files. If run on the current directory, it is '.' 
         """
         # load VP timeseries
-        vantagePoint = ts.ArrayTimeSeries(np.load(self.VPTSfile))
+        vantagePoint = ts.ArrayTimeSeries(np.load(folderPath+self.VPTSfile))
         stdVP =  stand(vantagePoint, vantagePoint.mean(), vantagePoint.std())
         # load each of the n timeseries
         for i in range(n):
-            tsFileName = str(folderPath) + '/' + 'ts_' +str(i + 1)+'.npy'
+            # tsFileName = str(folderPath) + '/' + 'ts_' +str(i + 1)+'.npy'
+            tsFileName = './data2/ts_' + str(i + 1) + '.npy'
             TS = ts.ArrayTimeSeries(np.load(tsFileName))
             # standardize TS
             stdts = stand(TS, TS.mean(), TS.std())
@@ -706,8 +707,9 @@ def createVPForest(k = 20, n = 1000):
     vpdbList = []
     VPDict = selectVPs()
     for i in range(k):
-        vpdb = VantagePointDB("./" + VPDict[i+1][1] , "./" + VPDict[i+1][0], VPDict)
-        vpdb.populate_VPDistTree(n, '.')
+        # vpdb = VantagePointDB("./" + VPDict[i+1][1] , "./" + VPDict[i+1][0], VPDict)
+        vpdb = VantagePointDB(VPDict[i + 1][1], VPDict[i + 1][0], VPDict)
+        vpdb.populate_VPDistTree(n, './data2/')
         # store list of vpdb instances
         vpdbList.append(vpdb)
     return vpdbList

@@ -7,7 +7,7 @@ from TimeSeriesDistance import tsmaker
 import numpy as np
 def generateAndStoreTimeSeries(n = 1000):
     for i in range(n):
-        fileName = 'ts_'+str(i+1)+'.npy'
+        fileName = 'data2/ts_'+str(i+1)+'.npy'
         timeSeries = tsmaker(0.5, 0.1, 0.01)
         np.save(fileName, timeSeries)
 

@@ -23,25 +23,12 @@ WARNINGS
 - File directory for timeseries assumes UNIX OS syntax 
 - Will raise exception if timeseries files do not exist in current directory
 
-Example input and output: 
--------------------------
-> mostSimilarTS.mostSimilarTS('./ts_100.npy', VPDict, 10)
-Nodes in search region =  561
-['./ts_100.npy', './ts_586.npy', './ts_106.npy', './ts_283.npy', './ts_478.npy', './ts_702.npy', './ts_248.npy', './ts_439.npy', './ts_800.npy', './ts_274.npy']
-
->>> import generateAndStoreTS, TimeSeriesDistance, buildVPDBforest, mostSimilarTS, pickle
->>> generateAndStoreTS.generateAndStoreTimeSeries()
->>> VPDBList = buildVPDBforest.createVPForest()
->>> mostSimilarTS.mostSimilarTS('./ts_1.npy', VPDBList[0].VPDict, 1)
-['./ts_1.npy']
-['./ts_1.npy']
-
 """
 
 import numpy as np
-import ArrayTimeSeries as ts
-from TimeSeriesDistance import tsmaker, random_ts, stand, ccor, max_corr_at_phase, kernel_corr, kcorr_dist
-import buildVPDBforest as VPDBforest
+import timeseries.ArrayTimeSeries as ts
+from timeseries.TimeSeriesDistance import tsmaker, random_ts, stand, ccor, max_corr_at_phase, kernel_corr, kcorr_dist
+import timeseries.buildVPDBforest as VPDBforest
 
 def mostSimilarTS(inputFileName, VPDict, howmany = 1):
     # to store the distance from target to each of the VPs

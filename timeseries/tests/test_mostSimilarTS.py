@@ -1,4 +1,5 @@
-import generateAndStoreTS, TimeSeriesDistance, buildVPDBforest, mostSimilarTS, pickle
+from timeseries import generateAndStoreTS, TimeSeriesDistance, buildVPDBforest, mostSimilarTS
+import pickle
 import unittest
 
 generateAndStoreTS.generateAndStoreTimeSeries()
@@ -10,7 +11,7 @@ class MyTest(unittest.TestCase):
     # all of them have test_xxx so that unittest main can run it
     
     def mostSimilarTS(self, inputFileName, VPDict, howmany = 1):
-        self.assertEqual(mostSimilarTS.mostSimilarTS('./ts_1.npy', VPDBList[0].VPDict, 1), ['./ts_1.npy'])
+        self.assertEqual(mostSimilarTS.mostSimilarTS('data2/ts_1.npy', VPDBList[0].VPDict, 1), ['data2/ts_1.npy'])
     
 
 if __name__ == '__main__':
