@@ -1,5 +1,5 @@
 import numpy as np
-from ArrayTimeSeries import ArrayTimeSeries, check_length, LazyOperation
+from timeseries.ArrayTimeSeries import ArrayTimeSeries, check_length, LazyOperation
 from pytest import raises
 from math import sqrt
 
