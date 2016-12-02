@@ -21,15 +21,14 @@ test_multiple_ts():
 """
 
 import numpy as np
-from os import system
+import os
 from pytest import raises
-from storagemanager.SMInterface import StorageManagerInterface
-from storagemanager.SMInterface import StorageManagerInterface
 from storagemanager.FileStorageManager import FileStorageManager
 from timeseries.ArrayTimeSeries import ArrayTimeSeries
 
 # clean up data folder
-system("rm ./data/*.npy")
+os.system("rm ./data/*.npy")
+
 
 def test_init():
     """
@@ -39,6 +38,7 @@ def test_init():
     test_fsm = FileStorageManager()
     assert test_fsm._id == set()
 
+
 def test_gen_id():
     """
     A function to test gen_id
@@ -47,6 +47,7 @@ def test_gen_id():
     test_fsm = FileStorageManager()
     test_id = test_fsm.gen_id()
     assert test_id == 0
+
 
 def test_ts2nparray():
     """
@@ -61,6 +62,7 @@ def test_ts2nparray():
     assert np.array_equal(test_array, correct_array)
     assert test_array.dtype == 'float64'
 
+
 def test_store():
     """
     A function to test store
@@ -74,6 +76,7 @@ def test_store():
     assert np.array_equal(return_ts.times(), np.array([1, 2, 3, 4, 5]))
     assert np.array_equal(return_ts.values(), np.array([11, 12, 13, 14, 15]))
 
+
 def test_size():
     """
     A function to test size
@@ -83,6 +86,7 @@ def test_size():
     id_now = max(test_fsm._id)
     assert test_fsm.size(id_now) == 5
     with raises(ValueError): test_fsm.size(3)
+
 
 def test_get():
     """
@@ -96,6 +100,7 @@ def test_get():
     assert np.array_equal(gotten_ts_00.times(), np.array([1, 2, 3, 4, 5]))
     assert np.array_equal(gotten_ts_00.values(), np.array([11, 12, 13, 14, 15]))
     with raises(ValueError): test_fsm.get(3)
+
 
 def test_multiple_ts():
     """
