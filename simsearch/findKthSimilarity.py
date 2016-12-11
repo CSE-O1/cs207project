@@ -2,7 +2,7 @@ import sys
 import timeseries.ArrayTimeSeries as ts
 import simsearch.SimilaritySearch as ss
 import numpy as np
-import simsearch.btreeDB as btreeDB
+import simsearch.database as btreeDB
 
 
 def load_ts_data(file_name):

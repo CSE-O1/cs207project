@@ -1,6 +1,7 @@
 import pickle
 from queue import Queue
 
+
 class Color(object):
     RED = 'red'
     BLACK = 'black'
@@ -10,6 +11,7 @@ class ValueRef(object):
     """
     a reference to a string value on disk
     """
+
     def __init__(self, referent=None, address=0):
         """
         Initializes a value reference that takes in a referent and the address in disk.
@@ -98,6 +100,7 @@ class RedBlackNodeRef(ValueRef):
     Subclass of ValueRef
     calls the RedBlackNode's store_refs
     """
+
     def prepare_to_store(self, storage):
         """
         Have a node store its refs
@@ -408,7 +411,7 @@ class RedBlackNode(object):
         """
         lchild = self._follow(self.left_ref)
         rchild = self._follow(self.right_ref)
-        if node.key == "Invalid key":
+        if node.key == "Invalid Key":
             return self
         if node.key < self.key:
             return RedBlackNode.from_node(
@@ -437,7 +440,6 @@ class RedBlackNode(object):
             RedBlackNodeRef(referent=RedBlackEmptyNode()),
             color_ref=ValueRef(Color.RED)
         )).blacken()
-
 
     def _follow(self, ref):
         """
@@ -497,6 +499,7 @@ class RedBlackTree(object):
     """
     Immutable RedBlackTree Tree class.
     """
+
     def __init__(self, storage):
         """
         Initializes a balanced Red Black tree from a provided storage.
@@ -584,6 +587,32 @@ class RedBlackTree(object):
         value_ref = ValueRef(value)
         # insert and get new tree ref
         self._tree_ref = self._insert(node, key, value_ref)
+
+    def get_smaller_nodes(self, key):
+        "find all of the nodes in RBTree whose key is less than given KEY"
+        if not self._storage.locked:
+            self._refresh_tree_ref()
+        node = self._follow(self._tree_ref)
+        smaller_keys, smaller_vals = [], []
+        # using DFS recursion function to find smaller nodes
+        smaller_keys, smaller_vals = self.dfs_helper(key, node, smaller_keys, smaller_vals)
+        return smaller_keys, smaller_vals
+
+    def dfs_helper(self, key, node, smaller_keys, smaller_vals):
+        "DFS recursion helper function for get_smaller_nodes"
+        print(node.key, key)
+        if node.key == "Invalid Key":
+            return smaller_keys, smaller_vals
+        elif key >= node.key:
+            smaller_keys.append(node.key)
+            smaller_vals.append(self._follow(node.value_ref))
+            # for right node
+            right_node = self._follow(node.right_ref)
+            self.dfs_helper(key, right_node, smaller_keys, smaller_vals)
+        # for left node
+        left_node = self._follow(node.left_ref)
+        self.dfs_helper(key, left_node, smaller_keys, smaller_vals)
+        return smaller_keys, smaller_vals
 
     def _insert(self, node, key, value_ref):
         """
