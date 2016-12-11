@@ -600,7 +600,6 @@ class RedBlackTree(object):
 
     def dfs_helper(self, key, node, smaller_keys, smaller_vals):
         "DFS recursion helper function for get_smaller_nodes"
-        print(node.key, key)
         if node.key == "Invalid Key":
             return smaller_keys, smaller_vals
         elif key >= node.key:

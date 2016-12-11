@@ -2,7 +2,7 @@ import sys
 import timeseries.ArrayTimeSeries as ts
 import simsearch.SimilaritySearch as ss
 import numpy as np
-import simsearch.database as btreeDB
+import simsearch.database as rbtreeDB
 
 
 def load_ts_data(file_name):
@@ -24,7 +24,7 @@ def max_similarity_search(input_ts):
     min_ts_file_name = ""
     for i in range(20):
         db_name = "vpDB/db_" + str(i) + ".dbdb"
-        db = btreeDB.connect(db_name)
+        db = rbtreeDB.connect(db_name)
         ts_data_file_name = db.get(0)
         vp_ts = load_ts_data(ts_data_file_name)
         std_vp_ts = ss.standardize(vp_ts)
@@ -41,7 +41,7 @@ def kth_similarity_search(input_ts, min_dis, min_db_name, k=1):
     find the most kth similar timeseries data
     return file names in an array
     """
-    db = btreeDB.connect(min_db_name)
+    db = rbtreeDB.connect(min_db_name)
     keys, ts_file_names = db.get_smaller_nodes(2.0 * min_dis)
     ts_file_lens = len(ts_file_names)
     kth_ts_list = []

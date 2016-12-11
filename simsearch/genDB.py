@@ -5,7 +5,7 @@ import numpy as np
 import random
 import timeseries.ArrayTimeSeries as ts
 import simsearch.SimilaritySearch as ss
-import simsearch.database as btreeDB
+import simsearch.database as rbtreeDB
 
 
 def load_ts_data(file_name):
@@ -31,7 +31,7 @@ def save_vp_dbs(num, vps_list):
     "save vantage point in btreeDB given in LAB10"
     for index in range(num):
         db_name = "vpDB/db_" + str(index) + ".dbdb"
-        db = btreeDB.connect(db_name)
+        db = rbtreeDB.connect(db_name)
         for i in range(1000):
             file_name = './tsData/ts_data_' + str(i) + '.txt'
             comp_ts = load_ts_data(file_name)

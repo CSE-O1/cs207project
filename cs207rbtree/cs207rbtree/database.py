@@ -1,7 +1,8 @@
 import os
 import struct
 import portalocker
-from simsearch.tree import RedBlackTree
+from cs207rbtree.tree import RedBlackTree
+
 
 class Storage(object):
     SUPERBLOCK_SIZE = 4096
@@ -20,7 +21,7 @@ class Storage(object):
         """
         self._f = f
         self.locked = False
-        #we ensure that we start in a sector boundary
+        # we ensure that we start in a sector boundary
         self._ensure_superblock()
 
     def _ensure_superblock(self):
