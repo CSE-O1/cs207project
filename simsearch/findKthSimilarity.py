@@ -1,5 +1,5 @@
 import sys
-import simsearch.TimeSeries as ts
+import timeseries.ArrayTimeSeries as ts
 import simsearch.SimilaritySearch as ss
 import numpy as np
 import simsearch.btreeDB as btreeDB
@@ -8,7 +8,7 @@ import simsearch.btreeDB as btreeDB
 def load_ts_data(file_name):
     "load timeseries data form given file name"
     ts_raw_data = np.loadtxt(file_name, delimiter=' ')
-    ts_data = ts.TimeSeries(ts_raw_data[:, 1], ts_raw_data[:, 0])
+    ts_data = ts.ArrayTimeSeries(ts_raw_data[:, 1], ts_raw_data[:, 0])
     return ts_data
 
 
