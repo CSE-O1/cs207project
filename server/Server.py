@@ -14,6 +14,7 @@ class Server:
     def handler(self, conn):
         '''
         Receive query from client and processing the query.
+        Call process to handling data, and get message to return to client.
         '''
         msghead = conn.recv(20)
         if not msghead:
@@ -27,7 +28,17 @@ class Server:
             if dat == "close":
                 self._close = True
                 break
-            self.process(dat, conn)
+
+            return_obj = self.process(dat, conn)
+
+            return_msg = pickle.dumps(return_obj)
+            return_msghead = str(len(return_msg))
+            if len(return_msghead) < 10:
+                return_msghead = "0" * (10 - len(return_msghead)) + return_msghead
+                conn.send(pickle.dumps(return_msghead))
+            while len(return_msg):
+                nsent = conn.send(return_msg)
+                return_msg = return_msg[nsent:]
 
     def shutdown(self):
         self._socket.close()
@@ -46,8 +57,12 @@ class Server:
         Main function you should implement to process incoming messages,
         and possibly return some messages to client via conn.
         '''
+
+        #processing data
         print(dat)
-        conn.send(pickle.dumps("done"))
+
+        #data to be returned to client
+        return str(dat) + "done"
 
 if __name__ == "__main__":
     ts_server = Server(int(sys.argv[1]))
