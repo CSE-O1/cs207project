@@ -3,11 +3,13 @@ import timeseries.ArrayTimeSeries as ts
 import simsearch.SimilaritySearch as ss
 import numpy as np
 import simsearch.database as rbtreeDB
+from storagemanager.FileStorageManager import FileStorageManager
 
+fsm = FileStorageManager()
 
 def load_ts_data(file_name):
     "load timeseries data form given file name"
-    ts_raw_data = np.loadtxt("simsearch"+file_name[1:], delimiter=' ')
+    ts_raw_data = np.loadtxt(file_name, delimiter=' ')
     ts_data = ts.ArrayTimeSeries(ts_raw_data[:, 1], ts_raw_data[:, 0])
     return ts_data
 
@@ -23,17 +25,18 @@ def max_similarity_search(input_ts):
     min_db_name = ""
     min_ts_file_name = ""
     for i in range(20):
-        db_name = "./vpDB/db_" + str(i) + ".dbdb"
+        db_name = "vpDB/db_" + str(i) + ".dbdb"
         db = rbtreeDB.connect(db_name)
-        ts_data_file_name = db.get(0)
-        vp_ts = load_ts_data(ts_data_file_name)
+        ts_id = db.get(0)
+        vp_ts = fsm.get(ts_id)
+        # vp_ts = load_ts_data(ts_data_file_name)
         std_vp_ts = ss.standardize(vp_ts)
         curr_dis = ss.kernel_dis(std_vp_ts, std_comp_ts)
         if min_dis > curr_dis:
             min_dis = curr_dis
             min_db_name = db_name
-            min_ts_file_name = ts_data_file_name
-    return min_dis, min_db_name, min_ts_file_name
+            min_ts_id = ts_id
+    return min_dis, min_db_name, min_ts_id
 
 
 def kth_similarity_search(input_ts, min_dis, min_db_name, k=1):
@@ -42,14 +45,17 @@ def kth_similarity_search(input_ts, min_dis, min_db_name, k=1):
     return file names in an array
     """
     db = rbtreeDB.connect(min_db_name)
-    keys, ts_file_names = db.get_smaller_nodes(2.0 * min_dis)
-    ts_file_lens = len(ts_file_names)
+    keys, ts_ids = db.get_smaller_nodes(2.0 * min_dis)
+    # ts_file_lens = len(ts_file_names)
     kth_ts_list = []
-    for i in range(ts_file_lens):
-        res_ts = load_ts_data(ts_file_names[i])
+    # for i in range(ts_file_lens):
+    for ts_id in ts_ids:
+        # res_ts = load_ts_data(ts_file_names[i])
+        res_ts = fsm.get(ts_id)
         std_res_ts = ss.standardize(res_ts)
         curr_dis = ss.kernel_dis(std_res_ts, input_ts)
-        kth_ts_list.append((curr_dis, ts_file_names[i]))
+        kth_ts_list.append((curr_dis, ts_id))
+        # kth_ts_list.append((curr_dis, ts_file_names[i]))
     # sort in ascending order by distance
     kth_ts_list.sort(key=lambda kv: kv[0])
     # ill situation

@@ -1,20 +1,21 @@
 import sys
 from server.Client import Client
 from simsearch.findKthSimilarity import load_ts_data
+from storagemanager.FileStorageManager import FileStorageManager
 
 class DBClient(Client):
     def __init__(self, port_num):
         super(DBClient, self).__init__(port_num)
+        self._fsm = FileStorageManager()
 
     def query(self, q):
         if isinstance(q, int):
-            input_file_name = "./tsData/ts_data_{0}.txt".format(q)
+            input_ts =  self._fsm.get(q)
         elif isinstance(q, str):
-            input_file_name = q
+            input_ts = load_ts_data(q)
         else:
             raise ValueError("Query type not supported")
 
-        input_ts = load_ts_data(input_file_name)
         return_ts = self.sender(input_ts)
         return return_ts
 

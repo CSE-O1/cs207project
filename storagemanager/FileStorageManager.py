@@ -62,6 +62,18 @@ class FileStorageManager(StorageManagerInterface):
         except FileNotFoundError:
             self._id = set()
 
+    @property
+    def id(self):
+        "The id set"
+        return self._id
+
+    @property
+    def ts(self):
+        "The timeseries set"
+        for i in self.id:
+            ts = self.get(i)
+            yield ts
+
     def gen_id(self):
         """
         Generate an ID for a timeseries
@@ -90,7 +102,9 @@ class FileStorageManager(StorageManagerInterface):
         :return: the same timeseries
         :rtype: SizedContainerTimeSeriesInterface
         """
-        np.save('data/ts.'+str(id), self.ts2nparray(t))
+        # np.save('data/ts.'+str(id), self.ts2nparray(t))
+        np.savetxt('data/ts_data_'+str(id)+'.txt', np.transpose(np.array([list(t.itertimes()), list(t)])), delimiter=' ')
+
         self._id.add(id)
         with open('data/id.pkl', 'wb') as f:
             pickle.dump(self._id, f)
@@ -106,7 +120,9 @@ class FileStorageManager(StorageManagerInterface):
         """
         if not os.path.exists('data/ts.'+str(id)+'.npy'):
             raise ValueError("Timeseries with ID={0} does not exist.".format(id))
-        return len(np.load('data/ts.'+str(id)+'.npy')[0])
+        ts = np.loadtxt('data/ts_data_'+str(id)+'.txt', delimiter=' ')
+        return ts.shape[0]
+        # return len(np.load('data/ts.'+str(id)+'.npy')[0])
 
     def get(self, id):
         """
@@ -116,7 +132,7 @@ class FileStorageManager(StorageManagerInterface):
         :return: timeseries of the given ID
         :rtype: SizedContainerTimeSeriesInterface
         """
-        if not os.path.exists('data/ts.' + str(id) + '.npy'):
+        if not os.path.exists('data/ts_data_'+str(id)+'.txt'):
             raise ValueError("Timeseries with ID={0} does not exist.".format(id))
-        tsnparray = np.load('data/ts.' + str(id) + '.npy')
-        return ArrayTimeSeries(tsnparray[1], tsnparray[0])
+        ts = np.loadtxt('data/ts_data_'+str(id)+'.txt')
+        return ArrayTimeSeries(ts[:, 1], ts[:, 0])
