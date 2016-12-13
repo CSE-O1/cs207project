@@ -7,7 +7,7 @@ import simsearch.database as rbtreeDB
 
 def load_ts_data(file_name):
     "load timeseries data form given file name"
-    ts_raw_data = np.loadtxt(file_name, delimiter=' ')
+    ts_raw_data = np.loadtxt("simsearch"+file_name[1:], delimiter=' ')
     ts_data = ts.ArrayTimeSeries(ts_raw_data[:, 1], ts_raw_data[:, 0])
     return ts_data
 
@@ -23,7 +23,7 @@ def max_similarity_search(input_ts):
     min_db_name = ""
     min_ts_file_name = ""
     for i in range(20):
-        db_name = "vpDB/db_" + str(i) + ".dbdb"
+        db_name = "./vpDB/db_" + str(i) + ".dbdb"
         db = rbtreeDB.connect(db_name)
         ts_data_file_name = db.get(0)
         vp_ts = load_ts_data(ts_data_file_name)

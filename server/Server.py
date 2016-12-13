@@ -25,7 +25,7 @@ class Server:
             if not msg:
                 break
             dat = pickle.loads(msg)
-            if dat == "close":
+            if isinstance(dat, str) and dat == "close":
                 self._close = True
                 break
 

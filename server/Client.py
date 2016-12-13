@@ -32,6 +32,12 @@ class Client:
         return_dat = pickle.loads(return_msg)
         return return_dat
 
+    def query(self):
+        '''
+        function to implement for your own use
+        '''
+        pass
+
 if __name__ == "__main__":
     ts_client = Client(int(sys.argv[1]))
     print(ts_client.sender(sys.argv[2]))
