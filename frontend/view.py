@@ -5,7 +5,6 @@ from server.DBClient import DBClient
 
 app = Flask(__name__)
 
-ts_client = DBClient(50000)
 
 @app.route('/')
 @app.route('/index')
@@ -29,6 +28,7 @@ def get_timeseries():
     level_in = request.args.get('level_in')
     level = request.args.get('level')
     """
+    ts_client = DBClient(50000)
     request_string = request.args
     msg = {}
     for arg in request_string:
@@ -57,6 +57,7 @@ def get_timeseries():
 
 @app.route('/timeseries', methods=['POST'])
 def post_timeseries():
+    ts_client = DBClient(50000)
     upload_data = request.get_json(force=True)
     if ('id' not in upload_data or 'time' not in upload_data or 'value' not in upload_data):
         return json.dumps("Invalid file.")
@@ -79,6 +80,7 @@ def post_timeseries():
 
 @app.route('/timeseries/<id>')
 def timeseries_id(id):
+    ts_client = DBClient(50000)
     # call for response
     # given id, return ts data and metadata
     msg = {}
@@ -103,6 +105,7 @@ def timeseries_id(id):
 
 @app.route('/simquery', methods=['GET'])
 def get_similar_ts():
+    ts_client = DBClient(50000)
     sim_id = request.args.get('id')
     #k = request.args.get('k')
     #if k is None:
@@ -133,6 +136,7 @@ def get_similar_ts():
 
 @app.route('/simquery', methods=['POST'])
 def post_similar_ts():
+    ts_client = DBClient(50000)
     input_data = request.get_json(force=True)
     #if 'k' not in input_data:
     #    input_data['k'] = 5
