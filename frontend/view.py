@@ -11,7 +11,6 @@ app = Flask(__name__)
 def index():
     return render_template('index.html', title='Home')
 
-
 # @app.route('/timeseries', methods=['GET'])
 # def get_default_ts():
 #     ts_client = DBClient(50000)
@@ -22,17 +21,14 @@ def index():
 @app.route('/timeseries', methods=['GET'])
 def get_timeseries():
     """
-    mean_in = request.args.get('mean_in')
-    std_in = request.args.get('std_in')
-    blarg_in = request.args.get('blarg_in')
-    level_in = request.args.get('level_in')
-    level = request.args.get('level')
+    send back filtered metadata given mean range or levels
     """
     ts_client = DBClient(50000)
     request_string = request.args
     msg = {}
     for arg in request_string:
         arg_vals = parse_query(arg, request_string[arg])
+        #filter by mean in
         if arg == 'mean_in':
             # ts_queried = Timeseries
             # call for response
@@ -40,23 +36,31 @@ def get_timeseries():
             msg['mean_in'] = [arg_vals[0], arg_vals[1]]
             return_msg = ts_client.query(msg)
             #return_msg should be a metadata array
-            return jsonify({"mean_in" : return_msg})
+            length = len(return_msg)
+            return jsonify({"length" : length, "mean_in1" : return_msg[0], "mean_in2" : return_msg[-1]})
+        #filter by level
         elif arg == 'level_in':
             msg['type'] = 'level_in'
             msg['level_in'] = arg_vals
             return_msg = ts_client.query(msg)
             #return_msg should be a metadata array
             #be careful, msg['level_in'] is a array
-            return jsonify({"level_in" : return_msg})
-
+            length = len(return_msg)
+            return jsonify({"length" : length, "level_in1" : return_msg[0], "level_in2" : return_msg[-1]})
+    #return all metadata
     msg['type'] = 'all'
     return_msg = ts_client.query(msg)
+    length = len(return_msg)
     # return_msg should be all metadata
-    return jsonify({"metadata_all": return_msg})
+    return jsonify({"length" : length, "metadata_1": return_msg[0], "metadata_2": return_msg[-1]})
 
 
 @app.route('/timeseries', methods=['POST'])
 def post_timeseries():
+    """
+    add new timeseries given with key in jason format into database
+    return the timeseries
+    """
     ts_client = DBClient(50000)
     upload_data = request.get_json(force=True)
     if ('id' not in upload_data or 'time' not in upload_data or 'value' not in upload_data):
@@ -80,6 +84,9 @@ def post_timeseries():
 
 @app.route('/timeseries/<id>')
 def timeseries_id(id):
+    """
+    send back metadata and timeseries given in id
+    """
     ts_client = DBClient(50000)
     # call for response
     # given id, return ts data and metadata
@@ -103,10 +110,13 @@ def timeseries_id(id):
     return jsonify({"ts": ts, "metadata": return_msg['metadata']})
 
 
-@app.route('/simquery', methods=['GET'])
-def get_similar_ts():
+@app.route('/simquery/<id>')
+def get_similar_ts(id):
+    """
+    return kth closest timeseries' key to the given id timeseries
+    """
     ts_client = DBClient(50000)
-    sim_id = request.args.get('id')
+    sim_id = id#request.args.get('id')
     #k = request.args.get('k')
     #if k is None:
     k = 3
@@ -114,28 +124,23 @@ def get_similar_ts():
     # return nth closest ts data to ts with sim_id
     msg = {}
     msg['type'] = 'ss_id'
-    msg['id'] = id
+    msg['id'] = sim_id
     msg['k'] = k
     #return_msg should be a ts array
     #[ts1, ts2, ... , tsn]
     return_msg = ts_client.query(msg)
-    if len(return_msg) == 0:
+    if not return_msg or len(return_msg) == 0:
         return jsonify("Find nothing!")
-
-    tst1 = list(return_msg[0].times)
-    tsv1 = list(return_msg[0].values)
-
-    tst2 = list(return_msg[1].times)
-    tsv2 = list(return_msg[1].values)
-
-    tst3 = list(return_msg[2].times)
-    tsv3 = list(return_msg[2].values)
-
-    return jsonify({"tst1": tst1, "tsv1": tsv1, "tst2": tst2, "tsv2": tsv2, "tst3": tst3, "tsv3": tsv3})
+    print(return_msg)
+    ids = [msg[1] for msg in return_msg]
+    return jsonify({"tsid": ids})
 
 
 @app.route('/simquery', methods=['POST'])
 def post_similar_ts():
+    """
+    return kth closest timeseries' key to the upload timeseries dataset
+    """
     ts_client = DBClient(50000)
     input_data = request.get_json(force=True)
     #if 'k' not in input_data:
@@ -150,7 +155,7 @@ def post_similar_ts():
     # return_msg should be a id(ts) array
     # [id1, id2, ... , idn]
     return_msg = ts_client.query(msg)
-    if len(return_msg) == 0:
+    if not return_msg or len(return_msg) == 0:
         return jsonify("Find nothing!")
 
     tst1 = list(return_msg[0].times)

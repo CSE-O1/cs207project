@@ -5,7 +5,6 @@ import numpy as np
 import simsearch.database as rbtreeDB
 from storagemanager.FileStorageManager import FileStorageManager
 
-fsm = FileStorageManager()
 
 
 def load_ts_data(file_name):
@@ -20,6 +19,7 @@ def max_similarity_search(input_ts):
     find the most similar vantage point of the target TS
     return tuple (minimum distance, vantage point, timeseries file name)
     """
+    fsm = FileStorageManager()
     comp_ts = input_ts
     std_comp_ts = ss.standardize(comp_ts)
     min_dis = float('inf')
@@ -44,6 +44,7 @@ def kth_similarity_search(input_ts, min_dis, min_db_name, k=1):
     find the most kth similar timeseries data
     return file names in an array
     """
+    fsm = FileStorageManager()
     db = rbtreeDB.connect(min_db_name)
     keys, ts_ids = db.get_smaller_nodes(2.0 * min_dis)
     kth_ts_list = []

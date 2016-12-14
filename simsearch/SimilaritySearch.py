@@ -29,8 +29,8 @@ def standardize(x):
 
 def ccor(ts1, ts2):
     "given two standardized time series, compute their cross-correlation using FFT"
-    f1 = fft(ts1.values())
-    f2 = np.conjugate(fft(ts2.values()))
+    f1 = fft(ts1.values)
+    f2 = np.conjugate(fft(ts2.values))
     cc = ifft(f1 * f2).real
     return cc / (1.0 * len(ts1))
 
