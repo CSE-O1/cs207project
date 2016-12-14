@@ -1,16 +1,14 @@
 from flask import Flask, request, abort, jsonify, make_response
 #from app import app, db, models
+from parsequery import parse_query
 app = Flask(__name__)
 
-def parse_query(arg_name, arg_val):
-    name_dict = {'mean_in': '-', 'level_in': ',', 'id': ','}
-    name = name_dict[arg_name]
-    return tuple(arg_val.split(name))
 
 # index
 @app.route('/')
-def render_index():
-    return make_response('Hello World!')
+@app.route('/index')
+def index():
+	return render_template('index.html',title='Home')
 
 @app.route('/timeseries', methods=['GET'])
 def get_timeseries():
@@ -34,6 +32,26 @@ def get_timeseries():
             pass
     #arg_res [arg.serialize() ]
     return jsonify(request_string)
+
+
+@app.route('/timeseries', methods=['POST'])
+def get_timeseries():
+    #data = request.get_json(force = True)
+    pass
+
+
+@app.route('/timeseries/<id>')
+def timeseries_id(id):
+    #response = communicationWithDB(id) id is DB's key
+    x = [1, 2, 3]
+    y = [4, 5, 6]
+    matrix = [x, y]
+    return jsonify(matrix)
+
+
+@app.route('/simquery', methods=['POST','GET'])
+def get_similar_ts():
+    pass
 
 
 @app.route('/timeseries/<id>', methods=['POST'])
