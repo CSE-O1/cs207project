@@ -6,7 +6,8 @@ from scipy.stats import norm
 
 def tsmaker(m, s, j):
     t = np.arange(0.0, 1.0, 0.01)
-    v = norm.pdf(t, m, s) + j * np.random.randn(100)
+    #v = norm.pdf(t, m, s) + j * np.random.randn(100)
+    v = j * np.random.randn(100)
     return ts.TimeSeries(list(v), list(t))
 
 
@@ -18,7 +19,7 @@ def random_ts(a):
 
 def stand(x, m, s):
     "standardize timeseries x by mean m and std deviation s"
-    return ts.ArrayTimeSeries((x.values() - m) / s, x.times())
+    return ts.ArrayTimeSeries((x.values - m) / s, x.times)
 
 
 def standardize(x):
