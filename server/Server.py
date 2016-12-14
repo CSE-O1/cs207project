@@ -3,13 +3,15 @@ import numpy as np
 import pickle
 import logging
 import sys
+from concurrent.futures import ThreadPoolExecutor
+
 
 class Server:
     def __init__(self, port_num):
         self._socket = socket(AF_INET, SOCK_STREAM)
         self._socket.bind(("", port_num))
         self._socket.listen(5)
-        self._close = False
+        self._tp_pool = ThreadPoolExecutor(12)
 
     def handler(self, conn):
         '''
@@ -25,12 +27,7 @@ class Server:
             if not msg:
                 break
             dat = pickle.loads(msg)
-            if isinstance(dat, str) and dat == "close":
-                self._close = True
-                break
-
             return_obj = self.process(dat, conn)
-
             return_msg = pickle.dumps(return_obj)
             return_msghead = str(len(return_msg))
             if len(return_msghead) < 10:
@@ -47,10 +44,8 @@ class Server:
         while True:
             conn, addr = self._socket.accept()
             logging.info("Connection from {0}".format(addr))
-            self.handler(conn)
-            if self._close:
-                self.shutdown()
-                break
+            self._tp_pool.submit(self.handler, conn)
+            # self.handler(conn)
 
     def process(self, dat, conn):
         '''
@@ -62,7 +57,7 @@ class Server:
         print(dat)
 
         #data to be returned to client
-        return str(dat) + "done"
+        return str(dat) + " done"
 
 if __name__ == "__main__":
     ts_server = Server(int(sys.argv[1]))

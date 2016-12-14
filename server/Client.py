@@ -2,6 +2,7 @@ import numpy as np
 import sys
 from socket import *
 import pickle
+from concurrent.futures import ThreadPoolExecutor
 
 class Client:
 
@@ -39,8 +40,13 @@ class Client:
         pass
 
 if __name__ == "__main__":
-    ts_client = Client(int(sys.argv[1]))
-    print(ts_client.sender(sys.argv[2]))
-
-
+    num = 20
+    tp_pool = ThreadPoolExecutor(num)
+    result = []
+    for i in range(num):
+        ts_client = Client(int(sys.argv[1]))
+        result.append(tp_pool.submit(ts_client.sender, i))
+    # print(ts_client.sender(sys.argv[2]))
+    for i in range(num):
+        print(result[i].result())
 

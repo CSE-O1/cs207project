@@ -7,6 +7,9 @@ import timeseries.ArrayTimeSeries as ts
 import simsearch.SimilaritySearch as ss
 import simsearch.database as rbtreeDB
 from storagemanager.FileStorageManager import FileStorageManager
+from concurrent import futures
+
+
 fsm = FileStorageManager()
 
 
@@ -42,14 +45,28 @@ def save_vp_dbs(num, vps_list):
         db.close()
 
 
+def save_vp_dbs_kernel(index, vps):
+    db_name = "vpDB/db_" + str(index) + ".dbdb"
+    db = rbtreeDB.connect(db_name)
+    for i in fsm.id:
+        comp_ts = fsm.get(i)
+        std_comp_ts = ss.standardize(comp_ts)
+        dis_to_vp = ss.kernel_dis(vps, std_comp_ts)
+        db.set(dis_to_vp, str(i))
+    db.commit()
+    db.close()
+
+
 def gen_dbs(num):
     "main function of generate vantage point database"
     if os.path.isdir('vpDB'):
         shutil.rmtree('vpDB')
     os.mkdir('vpDB')
     vps = gen_vps(num)
-    save_vp_dbs(num, vps)
-
+    with futures.ProcessPoolExecutor(max_workers=10) as pool:
+        for index in range(num):
+            pool.submit(save_vp_dbs_kernel, index, vps[index])
+    # save_vp_dbs(num, vps)
 
 if __name__ == "__main__":
     gen_dbs(20)

@@ -1,5 +1,5 @@
 from flask import Flask, request, abort, jsonify, make_response
-#from app import app, db, models
+from server.DBClient import DBClient
 app = Flask(__name__)
 
 def parse_query(arg_name, arg_val):
@@ -7,10 +7,18 @@ def parse_query(arg_name, arg_val):
     name = name_dict[arg_name]
     return tuple(arg_val.split(name))
 
-# index
 @app.route('/')
 def render_index():
     return make_response('Hello World!')
+
+@app.route('/timeseries', methods=['GET'])
+def get_default_ts():
+    ts_client = DBClient(50000)
+    return_ts = ts_client.query(31)
+    return make_response(str(return_ts))
+
+
+
 
 @app.route('/timeseries', methods=['GET'])
 def get_timeseries():
