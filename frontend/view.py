@@ -1,6 +1,6 @@
 from flask import Flask, request, abort, jsonify, make_response
-from app import app, db, models
-
+#from app import app, db, models
+app = Flask(__name__)
 
 def parse_query(arg_name, arg_val):
     name_dict = {'mean_in': '-', 'level_in': ',', 'id': ','}
