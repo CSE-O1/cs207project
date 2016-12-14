@@ -85,8 +85,6 @@ def timeseries_id(id):
     msg['type'] = 'id'
     msg['id'] = id
 
-    print(id);
-    print(msg);
     #return_msg format:
     #return_msg = { 'exist': 1 or 0,
     #               'tsdata': xxxx,
@@ -96,7 +94,10 @@ def timeseries_id(id):
     if return_msg['exist'] == "no":
         return jsonify("Timeseries id does not exist!")
 
-    return jsonify({"tsdata": return_msg['tsdata'], "metadata": return_msg['metadata']})
+    ts_time = return_msg['tsdata'].times
+    ts_value = return_msg['tsdata'].values
+
+    return jsonify({"tstimes": ts_time, "tsvalues": ts_value, "metadata": return_msg['metadata']})
 
 
 @app.route('/simquery', methods=['GET'])

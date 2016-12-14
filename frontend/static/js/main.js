@@ -15,15 +15,15 @@ function getID(){
     });
     console.log(response_from_server);
 
-    plotTS(response_from_server);
+    plotTS(response_from_server["tsvalues"],response_from_server["tstimes"]);
 
 }
 
-function plotTS(response){
+function plotTS(tsvalues, tstimes){
 
     var fake_MataData = {"id": 1, "mean":24, "std": 0.3, "blarg":0.5, "level":"A" };
     var fake_timeSeries = ([4,5,6],[1,2,3]);
-    $.plot($("#placeholder"), [ fake_timeSeries[1], fake_timeSeries[0] ], { yaxis: { max: 1 }});
+    $.plot($("#placeholder"), [ tstimes, tsvalues ], { yaxis: { max: 1 }});
 
 
 }

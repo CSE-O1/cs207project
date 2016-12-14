@@ -9,14 +9,7 @@ class DBClient(Client):
         self._fsm = FileStorageManager()
 
     def query(self, q):
-        if isinstance(q, int):
-            input_ts =  self._fsm.get(q)
-        elif isinstance(q, str):
-            input_ts = load_ts_data(q)
-        else:
-            raise ValueError("Query type not supported")
-
-        return_ts = self.sender(input_ts)
+        return_ts = self.sender(q)
         return return_ts
 
 if __name__ == "__main__":
