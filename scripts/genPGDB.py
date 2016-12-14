@@ -16,7 +16,11 @@ def gen_pg_db():
         os.remove('pgDB')
 
     table_now = 'meta'
-    pg = postgresAPI(host='localhost', dbname='pgDB', user='ubuntu', password='cs207password', table=table_now)
+    pg = postgresAPI(host='localhost', dbname='ubuntu', user='ubuntu', password='cs207password', table=table_now)
+    tmp1 = "DROP TABLE meta"
+    pg._cursor.execute(tmp1)
+    pg._conn.commit()
+    pg.create()
     for id in fsm.id:
         ts_data = fsm.get(id)
         meta = [id,
