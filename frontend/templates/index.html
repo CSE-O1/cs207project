@@ -36,7 +36,7 @@
     </div>
 
 
-    <div class="col-sm-12" id="placeholder"> </div>
+    <div class="col-sm-12" id="placehold"> </div>
 
 
     <div class="col-md-12">
@@ -74,10 +74,14 @@
             <button type="button" class="btn btn-primary" id="filterSubmit" onclick="filter()">Submit</button>
         </form>
         </div>
-        <br> <br>  <br>  <br>
+        <br> <br>
+        <div id="Meta"> </div>
 
+        <br>  <br>
+
+ 
  <div class="row instruct">
-        Input id to find most similar n exising series.
+        Input id to find 3 most similar exisiting timeseries.
     </div>
 
     <div class="row">
@@ -87,20 +91,24 @@
                 <input type="text" class="form-control" id="sim_id" placeholder="">
 
             </div>
-            <div class="form-group">
-                <label for="sim_num">Number: </label>
-                <input type="text" class="form-control" id="sim_num" placeholder="">
+            <!--<div class="form-group">-->
+                <!--<label for="sim_num">Number: </label>-->
+                <!--<input type="text" class="form-control" id="sim_num" placeholder="">-->
 
-            </div>
+            <!--</div>-->
 
             <button type="button" class="btn btn-primary" id="simGetSubmit" onclick="simGet()">Submit</button>
-            <button type="button" class="btn btn-primary" id="simGetShow" onclick="simGetShow()">Show</button>
+            <!--<button type="button" class="btn btn-primary" id="simGetShow" onclick="simGetShow()">Show</button>-->
         </form>
         </div>
 
 
 
-<br> <br>  <br>  <br>
+<div class="col-sm-12" id="placehold1"> </div>
+
+
+<!-- <br> <br>  <br>  <br> -->
+<div class="col-md-12">
  <div class="row instruct">
         Upload TimeSeries JASON file to find the most similar n exising series.
     </div>
@@ -111,6 +119,8 @@
         </label>
 
         <button type="button" class="btn btn-primary" id="Store" onclick="simPost()">Show</button>
+
+</div>
 
 
         <div class="col-sm-12">

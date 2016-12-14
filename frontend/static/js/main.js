@@ -2,37 +2,36 @@
 //plotTS();
 function getID(){
     var id = $('#ID').val();
-    var response_from_server;
     $.ajax({
         url: '/timeseries/' + id ,
         type: 'GET',
         success: function(response){
-            response_from_server=response;
+            plotTS(response["ts"]);
         },
         error: function(response){
             console.log("Error getting timeseries");
+           
         }
     });
-    console.log(response_from_server);
+   
 
-    plotTS(response_from_server["tsdata"]);
+    
 
 }
 
 function plotTS(ts){
 
-    var fake_MataData = {"id": 1, "mean":24, "std": 0.3, "blarg":0.5, "level":"A" };
-    var fake_timeSeries = ([4,5,6],[1,2,3]);
-    console.log(ts);
-    $.plot($("#placeholder"), [ ts[1], ts[0] ], { yaxis: { max: 1 }});
 
+    $.plot($("#placeholder"), [ ts ] );
 
-}
-
-function printMeta(meta){
 
 
 }
+
+// function printMeta(meta){
+//     $("#Meta").html()
+//
+// }
 
 function storeTS(){
     var file = $("#tsFile")[0];
@@ -64,6 +63,8 @@ function storeTS(){
               console.log("Error storing timeseries");
             }
           });
+
+        reader.readAsText(file);
     };
 
     
@@ -80,14 +81,21 @@ function filter(){
         param = {"level_in" : level};
     }
    
-
+    console.log(param);
     $.ajax({
         url: '/timeseries',
         type: 'GET',
         data: param,
         success: function(response){
             //metaData?
-            plotTS(response);
+            var retval;
+            for (i in response.length){
+
+                for (key in response[i]){
+                     retval = retval+ key + ": " + filters[i][key] + "<br>";
+                }
+            }
+            $("#Meta").html(retval);
         },
         error: function(response){
             console.log("Error Finding timeseries");
@@ -109,7 +117,7 @@ function simGet(){
         type: 'GET',
         data: {"id": id, "n": num},
         success: function(response){
-            plotTS(response);
+            plotTS([[response["tst1"], response["tsv1"]], [response["tst2"], response["tsv2"]], [response["tst3"], response["tsv3"] ]]);
         },
         error: function(response){
             console.log("Error Finding timeseries");
@@ -120,7 +128,7 @@ function simGet(){
 
 }
 
-function simGetShow(){}
+
 
 function simPost(){
         var file = $("#simPostFile")[0];

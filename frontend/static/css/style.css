@@ -41,7 +41,14 @@ label{
 #ID{
   width: 100px;
 }
-#placeholder{
+#placehold{
+  margin-top: 100px;
+  width: 450px;
+  height: 250px;
+  color: black;
+}
+
+#placehold1{
   margin-top: 100px;
   width: 450px;
   height: 250px;
