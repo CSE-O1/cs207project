@@ -3,7 +3,7 @@ python:
     - "3.5"
 before_install:
     - pip install pytest pytest-cov
-    - pip install coveralls portalocker psycopg2
+    - pip install coveralls portalocker psycopg2 flask
     - pip install scipy matplotlib
     - pip install numpy
 script:
