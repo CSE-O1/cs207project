@@ -118,7 +118,7 @@ function simGet(){
 
 
         $.ajax({
-        url: '/simquery',
+        url: '/simquery/' + id,
         type: 'GET',
         data: {"id": id, "n": num},
         success: function(response){
