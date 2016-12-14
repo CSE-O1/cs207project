@@ -84,6 +84,9 @@ def timeseries_id(id):
     msg = {}
     msg['type'] = 'id'
     msg['id'] = id
+
+    print(id);
+    print(msg);
     #return_msg format:
     #return_msg = { 'exist': 1 or 0,
     #               'tsdata': xxxx,
