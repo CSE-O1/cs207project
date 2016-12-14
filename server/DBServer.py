@@ -1,10 +1,14 @@
 import sys
 from server.Server import Server
+from server.pgDB import postgresAPI
 from simsearch.findKthSimilarity import max_similarity_search, kth_similarity_search
+
 
 class DBServer(Server):
     def __init__(self, port_num):
         super(DBServer, self).__init__(port_num)
+        self._postgres = postgresAPI()
+
 
     def process(self, dat, conn):
         min_dis, min_db_name, min_ts_file_name = max_similarity_search(dat)

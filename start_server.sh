@@ -20,7 +20,6 @@ sudo cp -R cs207project /home/www/
 cd /home/www/cs207project
 export FLASK_APP=./frontend/view.py
 PYTHONPATH=./ python3 server/DBServer.py 50000 &
-disown
 PYTHONPATH=./ python3 -m frontend.view
 flask run
 
