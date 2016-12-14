@@ -1,0 +1,166 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TimeSeries</title>
+
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css//style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>TimeSeries and DataBase</h1>
+    <h2>This is the final showcase of our project. Welcome to playing with Time Series ! </h2>
+
+    <ul id="myUL">
+
+    <div class="row instruct" > Type ID here: </div>
+
+    <div class="row">
+
+        <form class="form-inline pull-left input-sm" id="phaseForm">
+            <div class="form-group">
+                <label for="ID"></label>
+                <input type="text" class="form-control" id="ID" placeholder="">
+
+            </div>
+
+
+            <button type="button" class="btn btn-primary" id="IDSubmit" onclick="getID()">Submit</button>
+        </form>
+    </div>
+
+
+    <div class="col-sm-12" id="placehold"> </div>
+
+
+    <div class="col-md-12">
+        <div class="row instruct">
+            Upload Your JSON File:
+        </div>
+        <label class="btn btn-primary btn-file">
+            Browse
+            <input type="file" id="tsFile" style="display: none;">
+        </label>
+        <button type="button" class="btn btn-primary" id="Store" onclick="storeTS()">Show</button>
+    </div>
+
+
+
+
+    <!--<div id='editor'></div>-->
+
+        <div class="col-md-12"></div>
+
+ <div class="row">
+
+        <form class="form-inline pull-left input-sm" id="searchForm">
+
+    <div class="row instruct">
+        <p><strong>One requirement each time:</strong></p>
+    </div>
+            <div class="form-group">
+                <label for="mean_in">Filter by Mean: </label>
+                <input type="text" class="form-control" id="mean_in" placeholder="0.4-0.5">
+
+            </div>
+            <div class="form-group">
+                <label for="level_in">Filter by Level: </label>
+                <input type="text" class="form-control" id="level_in" placeholder="A,B">
+
+            </div>
+
+
+            <button type="button" class="btn btn-primary" id="filterSubmit" onclick="filter()">Submit</button>
+        </form>
+        </div>
+        <br> <br>
+        <div id="Meta"> </div>
+
+        <br>  <br>
+
+ 
+ <div class="row instruct">
+        Input id to find 3 most similar exisiting timeseries.
+    </div>
+
+    <div class="row">
+        <form class="form-inline pull-left input-sm" id="simGetForm">
+            <div class="form-group">
+                <label for="sim_id">ID: </label>
+                <input type="text" class="form-control" id="sim_id" placeholder="">
+
+            </div>
+            <!--<div class="form-group">-->
+                <!--<label for="sim_num">Number: </label>-->
+                <!--<input type="text" class="form-control" id="sim_num" placeholder="">-->
+
+            <!--</div>-->
+
+            <button type="button" class="btn btn-primary" id="simGetSubmit" onclick="simGet()">Submit</button>
+            <!--<button type="button" class="btn btn-primary" id="simGetShow" onclick="simGetShow()">Show</button>-->
+        </form>
+        </div>
+
+
+
+<div class="col-sm-12" id="placehold1"> </div>
+
+
+<!-- <br> <br>  <br>  <br> -->
+<div class="col-md-12">
+ <div class="row instruct">
+        Upload TimeSeries JASON file to find the most similar n exising series.
+    </div>
+
+          <label class="btn btn-primary btn-file">
+          Browse 
+          <input type="file" id="simPostFile" style="display: none;">
+        </label>
+
+        <button type="button" class="btn btn-primary" id="Store" onclick="simPost()">Show</button>
+
+</div>
+
+
+        <div class="col-sm-12">
+            <p>Instructions: </p>
+            <pre>
+            Please upload a JSON File with your timeseries
+            and its id as follows:
+                {
+                    "id" : 20,
+                    "value" : [3,4,5],
+                    "time" : [1,2,3]
+
+                }
+        </pre>
+        </div>
+
+
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- Load JS libraries: jQuery, bootstrap, D3, D3 tooltip -->
+<script src="../static/js/jquery.js"></script>
+<script src="../static/js/flot.js"></script>
+<script src="../static/js/bootstrap.js"></script>
+
+
+<!-- Your implementation -->
+<script src="../static/js/main.js"></script>
+</body>
+</html>

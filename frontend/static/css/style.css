@@ -1,0 +1,67 @@
+
+/* ADD YOUR STYLES HERE */
+body{
+  background-color: white;
+}
+h1{
+  color: black;
+  font-family: "Adobe Arabic";
+  font-size: 50px;
+  text-align: center
+}
+
+h2{
+  color: darkred;
+  font-family: "Adobe Arabic";
+  font-size: 30px;
+
+}
+.filter{
+  text-align: center;
+
+}
+
+.instruct{
+  padding-left: 30px;
+  font-size: 18px;
+
+
+}
+
+table{
+
+  margin-left: 120px;
+  margin-top:50px;
+}
+
+label{
+  font-size: 20px;
+}
+
+#ID{
+  width: 100px;
+}
+#placehold{
+  margin-top: 100px;
+  width: 450px;
+  height: 250px;
+  color: black;
+}
+
+#placehold1{
+  margin-top: 100px;
+  width: 450px;
+  height: 250px;
+  color: black;
+}
+
+#searchForm {
+  margin-top: 50px;
+}
+
+.input-sm{
+  margin-left: 15px;
+}
+.btn {
+  margin-left: 15px;
+}

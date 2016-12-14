@@ -1,7 +1,7 @@
 import os
 import struct
 import portalocker
-from cs207rbtree.tree import RedBlackTree
+from simsearch.tree import RedBlackTree
 
 
 class Storage(object):
