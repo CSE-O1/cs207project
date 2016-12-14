@@ -32,20 +32,22 @@ def get_timeseries():
     request_string = request.args
     for arg in request_string:
         arg_vals = parse_query(arg, request_string[arg])
+        msg = {}
         if arg == 'mean_in':
             # ts_queried = Timeseries
             # call for response
-            msg = {}
             msg['type'] = 'mean_in'
-            msg['min'] = arg[0]
-            msg['max'] = arg[1]
+            msg['mean_in'] = [arg_vals[0], arg_vals[1]]
             return_msg = ts_client.query(msg)
-            #do something on return_msg
-            
-
+            #return_msg should be a ts array
+            return jsonify({"mean_in" : return_msg})
         elif arg == 'level_in':
-            # call for response
-            pass
+            msg['type'] = 'level_in'
+            msg['level_in'] = arg_vals
+            return_msg = ts_client.query(msg)
+            #return_msg should be ts
+            #be careful, msg['level_in'] is a array
+            return jsonify({"level_in" : return_msg})
     temp = "waiting"
     return jsonify(temp)
 
@@ -55,22 +57,40 @@ def post_timeseries():
     upload_data = request.get_json(force=True)
     if ('id' not in upload_data or 'time' not in upload_data or 'value' not in upload_data):
         return json.dumps("Invalid file.")
+
     # call for response
     # adds a new timeseries(stored in upload_data) into the database
     # 'id', 'time', 'value'
-
+    msg = {}
+    #upload_data['id'] is id
+    #upload_data['value'] is the upload ts data's value
+    #upload_data['time'] is the upload ts data's time
+    msg['type'] = 'ts_data'
+    #be careful 'id' may already exist, in this case update this ts
+    msg['ts_data'] = [upload_data['id'], upload_data['value'], upload_data['time']]
+    #return this ts
+    return_msg = ts_client.query(msg)
     print("Successfully saved!")
+    return json.dumps(return_msg)
 
 
 @app.route('/timeseries/<id>')
 def timeseries_id(id):
-    # testcases for Amy
-    #response = communicationWithDB(id) id is DB's key
-    print(id)
-    x = [1, 2, 3]
-    y = [4, 5, 6]
-    matrix = [x, y]
-    return jsonify({'value':[1,2,3]})
+    # call for response
+    # given id, return ts data and metadata
+    msg = {}
+    msg['type'] = 'id'
+    msg['id'] = id
+    #return_msg format:
+    #return_msg = { 'exist': "yes" or "no",
+    #               'tsdata': xxxx,
+    #               'metadata': xxxx}
+    # if this id does not exit, return
+    return_msg = ts_client.query(msg)
+    if return_msg['exist'] == "no":
+        return jsonify("Timeseries id does not exist!")
+
+    return jsonify({"tsdata": return_msg['tsdata'], "metadata": return_msg['metadata']})
 
 
 @app.route('/simquery', methods=['GET'])
@@ -81,8 +101,16 @@ def get_similar_ts():
         n = 5
     # call for response
     # return nth closest ts data to ts with sim_id
-    temp = "waiting"
-    return jsonify(temp)
+    msg = {}
+    msg['type'] = 'ss_id'
+    msg['id'] = id
+    msg['n'] = n
+    #return_msg should be a ts array
+    #[ts1, ts2, ... , tsn]
+    return_msg = ts_client.query(msg)
+    if len(return_msg) == 0:
+        return jsonify("Find nothing!")
+    return jsonify({"similarity" : return_msg})
 
 
 @app.route('/simquery', methods=['POST'])
@@ -90,7 +118,16 @@ def post_similar_ts():
     input_data = request.get_json(force=True)
     if 'n' not in input_data:
         input_data['n'] = 5
+    n = input_data['n']
     # call for response
     # return nth closest ts data to input_data
-    temp = "waiting"
-    return jsonify(temp)
+    msg = {}
+    msg['type'] = 'ss_tsdata'
+    msg['tsdata'] = input_data
+    msg['n'] = n
+    # return_msg should be a ts array
+    # [ts1, ts2, ... , tsn]
+    return_msg = ts_client.query(msg)
+    if len(return_msg) == 0:
+        return jsonify("Find nothing!")
+    return jsonify({"similarity": return_msg})
