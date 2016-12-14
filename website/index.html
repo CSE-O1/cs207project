@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TimeSeries</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>TimeSeries</h1>
+    <div class="row instruct" > Type ID here: </div>
+    <div class="row">
+        <form class="form-inline pull-left input-sm" id="phaseForm">
+            <div class="form-group">
+                <label for="ID"></label>
+                <input type="text" class="form-control" id="ID" placeholder="">
+            </div>
+
+            <button type="button" class="btn btn-primary" id="IDSubmit" onclick="getID()">Submit</button>
+        </form>
+
+
+
+    <div class="col-sm-12" id="placeholder">
+
+
+    </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<!-- Load JS libraries: jQuery, bootstrap, D3, D3 tooltip -->
+<script src="js/jquery.js"></script>
+<script src="js/flot.js"></script>
+<script src="js/bootstrap.js"></script>
+
+
+<!-- Your implementation -->
+<script src="js/main.js"></script>
+</body>
+</html>
