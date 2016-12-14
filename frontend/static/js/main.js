@@ -112,6 +112,7 @@ function filter(){
 }
 
 
+
 function simGet(){
     var id = $('#simID').val();
     var num= $('#simNum').val();
@@ -120,7 +121,6 @@ function simGet(){
         $.ajax({
         url: '/simquery/' + id,
         type: 'GET',
-        data: {"id": id, "n": num},
         success: function(response){
             plotTS([[response["tst1"], response["tsv1"]], [response["tst2"], response["tsv2"]], [response["tst3"], response["tsv3"] ]]);
         },

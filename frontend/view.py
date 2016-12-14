@@ -40,19 +40,22 @@ def get_timeseries():
             msg['mean_in'] = [arg_vals[0], arg_vals[1]]
             return_msg = ts_client.query(msg)
             #return_msg should be a metadata array
-            return jsonify({"mean_in" : return_msg})
+            length = len(return_msg)
+            return jsonify({"length" : length, "mean_in1" : return_msg[0], "mean_in2" : return_msg[-1]})
         elif arg == 'level_in':
             msg['type'] = 'level_in'
             msg['level_in'] = arg_vals
             return_msg = ts_client.query(msg)
             #return_msg should be a metadata array
             #be careful, msg['level_in'] is a array
-            return jsonify({"level_in" : return_msg})
+            length = len(return_msg)
+            return jsonify({"length" : length, "level_in1" : return_msg[0], "level_in2" : return_msg[-1]})
 
     msg['type'] = 'all'
     return_msg = ts_client.query(msg)
+    length = len(return_msg)
     # return_msg should be all metadata
-    return jsonify({"metadata_all": return_msg})
+    return jsonify({"length" : length, "metadata_1": return_msg[0], "metadata_2": return_msg[-1]})
 
 
 @app.route('/timeseries', methods=['POST'])
@@ -101,7 +104,6 @@ def timeseries_id(id):
 
     ts = [[t, v] for t, v in zip(ts_time, ts_value)]
     return jsonify({"ts": ts, "metadata": return_msg['metadata']})
-
 
 @app.route('/simquery')
 def get_similar_ts(id):
