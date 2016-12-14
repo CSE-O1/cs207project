@@ -6,14 +6,14 @@ body{
 h1{
   color: black;
   font-family: "Adobe Arabic";
-  font-size: 70px;
+  font-size: 50px;
   text-align: center
 }
 
 h2{
-  color: red;
+  color: darkred;
   font-family: "Adobe Arabic";
-  font-size: 10px;
+  font-size: 30px;
 
 }
 .filter{
@@ -22,11 +22,12 @@ h2{
 }
 
 .instruct{
-  padding-left: 10px;
+  padding-left: 30px;
   font-size: 18px;
 
 
 }
+
 table{
 
   margin-left: 120px;
@@ -45,4 +46,15 @@ label{
   width: 450px;
   height: 250px;
   color: black;
+}
+
+#searchForm {
+  margin-top: 50px;
+}
+
+.input-sm{
+  margin-left: 15px;
+}
+.btn {
+  margin-left: 15px;
 }
