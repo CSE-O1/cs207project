@@ -15,16 +15,7 @@ sudo apt-get --upgrade
 printf "\n*******************************************************"
 printf "\nInstalling virtualenv, python3-pip, python3-dev, and psycopg2 ...\n"
 sudo apt-get install virtualenv python3-pip python3-dev python3-psycopg2
-sudo pip3 install numpy scipy portalocker
-sudo pip3 install flask flask_sqlalchemy flask_bootstrap flask_wtf
 
-
-# "~" specifies the AWS EC2 instance home directory for virtual environment
-cd ~
-mkdir venvs
-
-# use the AWS EC2 Ubuntu 16.04 instance python3 installation
-virtualenv --python=/usr/bin/python3 venvs/flaskproj
 
 printf "\n*******************************************************"
 printf "\nUpgrading pip ...\n"
@@ -34,10 +25,8 @@ pip3 install --upgrade pip
 printf "\n*******************************************************"
 printf "\nInstalling numpy ...\n"
 pip3 install numpy
-
-printf "\n*******************************************************"
-printf "\nInstalling Flask and SQL Alchemy ...\n"
-source ~/venvs/flaskproj/bin/activate
+pip3 install numpy scipy portalocker
+pip3 install flask flask_sqlalchemy flask_bootstrap flask_wtf
 
 # install flask and SQLAlchemy for Python3
 sudo pip3 install flask Flask-SQLAlchemy
@@ -80,8 +69,15 @@ sudo service nginx status
 # sudo apt-get install git
 
 echo "Generating Timeseries..."
-PYTHONPATH=./ python3 script/genTSData.py
+PYTHONPATH=./ python3 scripts/genTSData.py
 echo "Generating Vantage DB..."
-PYTHONPATH=./ python3 script/genDB.py
+PYTHONPATH=./ python3 scripts/genDB.py
+
+
+#cd ~
+#mkdir venvs
+#virtualenv --python=/usr/bin/python3 venvs/flaskproj
+#source ~/venvs/flaskproj/bin/activate
+
 
 printf "\nFINISHED!\n"
