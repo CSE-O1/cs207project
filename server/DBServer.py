@@ -11,9 +11,9 @@ class DBServer(Server):
         super(DBServer, self).__init__(port_num)
         self._postgres = postgresAPI(host='localhost', dbname='ubuntu', user='ubuntu', password='cs207password',
                                      table='meta')
-        self._fsm = FileStorageManager()
 
     def process(self, dat, conn):
+        fsm = FileStorageManager()
         query = dat['type']
         if query == "all":
             result = self._postgres.query_all()
@@ -23,12 +23,12 @@ class DBServer(Server):
             result = self._postgres.query_level(dat['level_in'])
         elif query == "ts_data":
             msg = dat['ts_data']
-            result = self._fsm.store(msg[0], ArrayTimeSeries(msg[1], msg[2]))
+            result = fsm.store(msg[0], ArrayTimeSeries(msg[1], msg[2]))
         elif query == "id":
             msg = dat['id']
             result = {}
             try:
-                result['tsdata'] = self._fsm.get(msg)
+                result['tsdata'] = fsm.get(msg)
                 result['exist'] = 1
                 result['metadata'] = self._postgres.query_id(msg)
             except ValueError:
@@ -38,8 +38,11 @@ class DBServer(Server):
             msg_k = dat['k']
             result = []
             try:
-                ts = self._fsm.get(msg_id)
+                print(msg_id)
+                ts = fsm.get(msg_id)
+                print(ts)
                 min_dis, min_db_name, min_ts_file_name = max_similarity_search(ts)
+                print(min_dis)
                 result = kth_similarity_search(ts, min_dis, min_db_name, msg_k)
             except ValueError:
                 pass
