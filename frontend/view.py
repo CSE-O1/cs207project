@@ -122,19 +122,11 @@ def get_similar_ts(id):
     #return_msg should be a ts array
     #[ts1, ts2, ... , tsn]
     return_msg = ts_client.query(msg)
-    if len(return_msg) == 0:
+    if not return_msg or len(return_msg) == 0:
         return jsonify("Find nothing!")
-
-    tst1 = list(return_msg[0].times)
-    tsv1 = list(return_msg[0].values)
-
-    tst2 = list(return_msg[1].times)
-    tsv2 = list(return_msg[1].values)
-
-    tst3 = list(return_msg[2].times)
-    tsv3 = list(return_msg[2].values)
-
-    return jsonify({"tst1": tst1, "tsv1": tsv1, "tst2": tst2, "tsv2": tsv2, "tst3": tst3, "tsv3": tsv3})
+    print(return_msg)
+    ids = [msg[1] for msg in return_msg]
+    return jsonify({"tsid": ids})
 
 
 @app.route('/simquery', methods=['POST'])
@@ -153,7 +145,7 @@ def post_similar_ts():
     # return_msg should be a id(ts) array
     # [id1, id2, ... , idn]
     return_msg = ts_client.query(msg)
-    if len(return_msg) == 0:
+    if not return_msg or len(return_msg) == 0:
         return jsonify("Find nothing!")
 
     tst1 = list(return_msg[0].times)
