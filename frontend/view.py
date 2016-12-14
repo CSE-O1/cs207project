@@ -30,26 +30,29 @@ def get_timeseries():
     level = request.args.get('level')
     """
     request_string = request.args
+    msg = {}
     for arg in request_string:
         arg_vals = parse_query(arg, request_string[arg])
-        msg = {}
         if arg == 'mean_in':
             # ts_queried = Timeseries
             # call for response
             msg['type'] = 'mean_in'
             msg['mean_in'] = [arg_vals[0], arg_vals[1]]
             return_msg = ts_client.query(msg)
-            #return_msg should be a ts array
+            #return_msg should be a metadata array
             return jsonify({"mean_in" : return_msg})
         elif arg == 'level_in':
             msg['type'] = 'level_in'
             msg['level_in'] = arg_vals
             return_msg = ts_client.query(msg)
-            #return_msg should be ts
+            #return_msg should be a metadata array
             #be careful, msg['level_in'] is a array
             return jsonify({"level_in" : return_msg})
-    temp = "waiting"
-    return jsonify(temp)
+
+    msg['type'] = 'all'
+    return_msg = ts_client.query(msg)
+    # return_msg should be all metadata
+    return jsonify({"metadata_all": return_msg})
 
 
 @app.route('/timeseries', methods=['POST'])
@@ -125,9 +128,9 @@ def post_similar_ts():
     msg['type'] = 'ss_tsdata'
     msg['tsdata'] = input_data
     msg['n'] = n
-    # return_msg should be a ts array
-    # [ts1, ts2, ... , tsn]
+    # return_msg should be a id(ts) array
+    # [id1, id2, ... , idn]
     return_msg = ts_client.query(msg)
     if len(return_msg) == 0:
         return jsonify("Find nothing!")
-    return jsonify({"similarity": return_msg})
+    return jsonify({"similarity_id": return_msg})
