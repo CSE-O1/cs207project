@@ -72,6 +72,8 @@ echo "Generating Timeseries..."
 PYTHONPATH=./ python3 scripts/genTSData.py
 echo "Generating Vantage DB..."
 PYTHONPATH=./ python3 scripts/genDB.py
+echo "Generating Metadata..."
+PYTHONPATH=./ python3 scripts/genPGDB.py
 
 
 #cd ~

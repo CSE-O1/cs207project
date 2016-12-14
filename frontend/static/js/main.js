@@ -17,13 +17,24 @@ function getID(){
 
     plotTS(response_from_server["tsvalues"],response_from_server["tstimes"]);
 
+
 }
 
+
 function plotTS(tsvalues, tstimes){
+
 
     var fake_MataData = {"id": 1, "mean":24, "std": 0.3, "blarg":0.5, "level":"A" };
     var fake_timeSeries = ([4,5,6],[1,2,3]);
     $.plot($("#placeholder"), [ tstimes, tsvalues ], { yaxis: { max: 1 }});
+
+
+
+
+}
+
+function printMeta(meta){
+
 
 
 }
@@ -38,6 +49,7 @@ function storeTS(){
 
 
     console.log(f);
+
     var reader = new FileReader();
     reader.onload = function(e){
 
@@ -60,6 +72,34 @@ function storeTS(){
     };
 
     
+
+}
+
+function filter(){
+    var level = $('#level_in').val();
+    var mean = $('#mean_in').val();
+    var param;
+    if(level==""){
+        param = {"mean_in" : mean};
+    }else{
+        param = {"level_in" : level};
+    }
+   
+
+    $.ajax({
+        url: '/timeseries',
+        type: 'GET',
+        data: param,
+        success: function(response){
+            //metaData?
+            plotTS(response);
+        },
+        error: function(response){
+            console.log("Error Finding timeseries");
+        }
+    });
+
+
 
 }
 
