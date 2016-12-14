@@ -61,8 +61,8 @@ def test_from_db():
     test_fsm = FileStorageManager()
     id_now = max(test_fsm._id)
     gotten_ts = SMTimeSeries.from_db(id_now, test_fsm)
-    assert np.array_equal(gotten_ts.times(), np.array([1, 2, 3, 4, 5]))
-    assert np.array_equal(gotten_ts.values(), np.array([11, 12, 13, 14, 15]))
+    assert np.array_equal(gotten_ts.times, np.array([1, 2, 3, 4, 5]))
+    assert np.array_equal(gotten_ts.values, np.array([11, 12, 13, 14, 15]))
 
 def test_setitem():
     """
@@ -76,7 +76,7 @@ def test_setitem():
     test_smts_01[0] = 15
     test_smts_01[2] = 35
     gotten_ts_01 = test_smts_01.from_db(test_smts_01._id, test_smts_01._fsm)
-    assert np.array_equal(gotten_ts_01.values(), np.array([15, 12, 35, 14, 15, 16]))
+    assert np.array_equal(gotten_ts_01.values, np.array([15, 12, 35, 14, 15, 16]))
     with raises(TypeError): test_smts_01[3.5] = 25
     with raises(ValueError): test_smts_01[15] = 25
 
@@ -94,8 +94,8 @@ def test_add():
     test_smts_02 = SMTimeSeries(test_time_02, test_value_02, test_fsm)
     test_smts_03 = test_smts_01 + test_smts_02
     gotten_ts = test_smts_03.from_db(test_smts_03._id, test_smts_03._fsm)
-    assert np.array_equal(gotten_ts.times(), np.array([1, 2, 3, 4, 5, 6]))
-    assert np.array_equal(gotten_ts.values(), np.array([21, 32, 43, 54, 65, 76]))
+    assert np.array_equal(gotten_ts.times, np.array([1, 2, 3, 4, 5, 6]))
+    assert np.array_equal(gotten_ts.values, np.array([21, 32, 43, 54, 65, 76]))
     with raises(TypeError): test_smts_04 = test_smts_01 + np.array([10, 20, 30, 40, 50, 60])
 
 def test_sub():
@@ -112,8 +112,8 @@ def test_sub():
     test_smts_02 = SMTimeSeries(test_time_02, test_value_02, test_fsm)
     test_smts_03 = test_smts_01 - test_smts_02
     gotten_ts = test_smts_03.from_db(test_smts_03._id, test_smts_03._fsm)
-    assert np.array_equal(gotten_ts.times(), np.array([1, 2, 3, 4, 5, 6]))
-    assert np.array_equal(gotten_ts.values(), np.array([1, -8, -17, -26, -35, -44]))
+    assert np.array_equal(gotten_ts.times, np.array([1, 2, 3, 4, 5, 6]))
+    assert np.array_equal(gotten_ts.values, np.array([1, -8, -17, -26, -35, -44]))
     with raises(TypeError): test_smts_04 = test_smts_01 - np.array([10, 20, 30, 40, 50, 60])
 
 def test_mul():
@@ -130,8 +130,8 @@ def test_mul():
     test_smts_02 = SMTimeSeries(test_time_02, test_value_02, test_fsm)
     test_smts_03 = test_smts_01 * test_smts_02
     gotten_ts = test_smts_03.from_db(test_smts_03._id, test_smts_03._fsm)
-    assert np.array_equal(gotten_ts.times(), np.array([1, 2, 3, 4, 5, 6]))
-    assert np.array_equal(gotten_ts.values(), np.array([11, 24, 13, 28, 15, 32]))
+    assert np.array_equal(gotten_ts.times, np.array([1, 2, 3, 4, 5, 6]))
+    assert np.array_equal(gotten_ts.values, np.array([11, 24, 13, 28, 15, 32]))
     with raises(TypeError): test_smts_04 = test_smts_01 * np.array([1, 2, 1, 2, 1, 2])
 
 def test_eq():

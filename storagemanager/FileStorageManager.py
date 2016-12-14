@@ -90,7 +90,7 @@ class FileStorageManager(StorageManagerInterface):
         :param t: input timeseries
         :return: a 2D np array containing time and value
         """
-        return np.vstack((t.times(), t.values())).astype(np.float64)
+        return np.vstack((t.times, t.values)).astype(np.float64)
 
     def store(self, id, t):
         """

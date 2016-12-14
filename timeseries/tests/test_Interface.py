@@ -73,15 +73,15 @@ def test_contains():
 
 #test values which returns self._value
 def test_values():
-    assert ts.values() == [1, 2]
+    assert ts.values == [1, 2]
 
 #test times which returns self._time
 def test_times():
-    assert ts.times() == [3, 4]
+    assert ts.times == [3, 4]
 
 #test items which returns self._timeseries
 def test_items():
-    assert ts.items() == [(1, 3), (2, 4)]
+    assert ts.items == [(1, 3), (2, 4)]
 
 def test_str():
     nts = ConcreteSizedContainerTimeSeriesInterface(list(range(100)), list(range(100)))
