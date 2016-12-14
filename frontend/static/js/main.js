@@ -167,6 +167,22 @@ function filter(){
 }
 
 
+function getID(){
+    var id = $('#ID').val();
+    $.ajax({
+        url: '/timeseries/' + id ,
+        type: 'GET',
+        success: function(response){
+            plotTS(response["ts"]);
+        },
+        error: function(response){
+            console.log("Error getting timeseries");
+
+        }
+    });
+
+}
+
 
 function simGet(){
     var id = $('#simID').val();
@@ -174,7 +190,7 @@ function simGet(){
 
     // $("#findSimilar").html("hello");
 
-        $.ajax({
+    $.ajax({
         url: '/simquery/' + id,
         type: 'GET',
         success: function(response){

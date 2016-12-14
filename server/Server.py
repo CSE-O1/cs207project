@@ -47,9 +47,9 @@ class Server:
     def start(self):
         while True:
             conn, addr = self._socket.accept()
-            logging.info("Connection from {0}".format(addr))
-            self._tp_pool.submit(self.handler, conn)
-            # self.handler(conn)
+            #logging.info("Connection from {0}".format(addr))
+            #self._tp_pool.submit(self.handler, conn)
+            self.handler(conn)
 
     def process(self, dat, conn):
         '''

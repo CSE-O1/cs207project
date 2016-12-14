@@ -8,41 +8,56 @@ from simsearch.findKthSimilarity import max_similarity_search, kth_similarity_se
 
 class DBServer(Server):
     def __init__(self, port_num):
+        """
+        create DB server
+        """
         super(DBServer, self).__init__(port_num)
         self._postgres = postgresAPI(host='localhost', dbname='ubuntu', user='ubuntu', password='cs207password',
                                      table='meta')
-        self._fsm = FileStorageManager()
 
     def process(self, dat, conn):
+        """
+        process message from flask
+        """
+        fsm = FileStorageManager()
+
         query = dat['type']
+        #return all metadata
         if query == "all":
             result = self._postgres.query_all()
+        #filter by mean range
         elif query == "mean_in":
             result = self._postgres.query_mean_range(dat['mean_in'])
+        #filtr by level
         elif query == "level_in":
             result = self._postgres.query_level(dat['level_in'])
+        #filter
         elif query == "ts_data":
             msg = dat['ts_data']
-            result = self._fsm.store(msg[0], ArrayTimeSeries(msg[1], msg[2]))
+            # add new timeseries given with key in jason format into database
+            result = fsm.store(msg[0], ArrayTimeSeries(msg[1], msg[2]))
         elif query == "id":
             msg = dat['id']
             result = {}
             try:
-                result['tsdata'] = self._fsm.get(msg)
+                result['tsdata'] = fsm.get(msg)
                 result['exist'] = 1
                 result['metadata'] = self._postgres.query_id(msg)
             except ValueError:
                 result['exist'] = 0
+        #return nth closest ts data to ts with sim_id
         elif query == "ss_id":
             msg_id = dat['id']
             msg_k = dat['k']
             result = []
             try:
-                ts = self._fsm.get(msg_id)
+                ts = fsm.get(msg_id)
                 min_dis, min_db_name, min_ts_file_name = max_similarity_search(ts)
                 result = kth_similarity_search(ts, min_dis, min_db_name, msg_k)
+                print(result)
             except ValueError:
                 pass
+        #return nth closest ts data to ts dataset
         elif query == "ss_tsdata":
             ts = dat['tsdata']
             msg_k = dat['k']

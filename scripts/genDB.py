@@ -9,16 +9,7 @@ import simsearch.database as rbtreeDB
 from storagemanager.FileStorageManager import FileStorageManager
 from concurrent import futures
 
-
 fsm = FileStorageManager()
-
-
-# def load_ts_data(file_name):
-#     "load timeseries data form given file name"
-#     ts_raw_data = np.loadtxt(file_name, delimiter=' ')
-#     ts_data = ts.ArrayTimeSeries(ts_raw_data[:, 1], ts_raw_data[:, 0])
-#     return ts_data
-
 
 def gen_vps(num):
     "generate vantage point"
@@ -37,6 +28,7 @@ def save_vp_dbs(num, vps_list):
         db_name = "vpDB/db_" + str(index) + ".dbdb"
         db = rbtreeDB.connect(db_name)
         for i in fsm.id:
+            print(i)
             comp_ts = fsm.get(i)
             std_comp_ts = ss.standardize(comp_ts)
             dis_to_vp = ss.kernel_dis(vps_list[index], std_comp_ts)
@@ -46,6 +38,9 @@ def save_vp_dbs(num, vps_list):
 
 
 def save_vp_dbs_kernel(index, vps):
+    """
+    store distance between vp to ts into vp database
+    """
     db_name = "vpDB/db_" + str(index) + ".dbdb"
     db = rbtreeDB.connect(db_name)
     for i in fsm.id:
@@ -66,7 +61,7 @@ def gen_dbs(num):
     with futures.ProcessPoolExecutor(max_workers=10) as pool:
         for index in range(num):
             pool.submit(save_vp_dbs_kernel, index, vps[index])
-    # save_vp_dbs(num, vps)
+    #save_vp_dbs(num, vps)
 
 if __name__ == "__main__":
     gen_dbs(20)
