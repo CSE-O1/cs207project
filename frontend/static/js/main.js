@@ -172,12 +172,19 @@ function simGet(){
     var id = $('#simID').val();
     var num= $('#simNum').val();
 
+    // $("#findSimilar").html("hello");
 
         $.ajax({
         url: '/simquery/' + id,
         type: 'GET',
         success: function(response){
-            plotTS([[response["tst1"], response["tsv1"]], [response["tst2"], response["tsv2"]], [response["tst3"], response["tsv3"] ]]);
+            var res = response["tsid"];
+            var retval = "IDs of similar timeseries: ";
+            for(i in len(res)){
+                retval = retval + res[i] + " ";
+            }
+
+            $("#findSimilar").html(retval);
         },
         error: function(response){
             console.log("Error Finding timeseries");
