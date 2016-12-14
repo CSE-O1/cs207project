@@ -76,6 +76,7 @@ def post_timeseries():
 
 @app.route('/timeseries/<id>')
 def timeseries_id(id):
+<<<<<<< HEAD
     # call for response
     # given id, return ts data and metadata
     msg = {}
@@ -91,6 +92,28 @@ def timeseries_id(id):
         return jsonify("Timeseries id does not exist!")
 
     return jsonify({"tsdata": return_msg['tsdata'], "metadata": return_msg['metadata']})
+||||||| merged common ancestors
+    # testcases for Amy
+    # x = [1, 2, 3]
+    # y = [4, 5, 6]
+    # matrix = [x, y]
+    # return jsonify(matrix)
+
+
+    # call for response
+    # given id, return ts data and metadata
+    ts = "ts"
+    met = "met"
+    return jsonify({"timeseries": ts, "metadata": met})
+=======
+    # testcases for Amy
+    #response = communicationWithDB(id) id is DB's key
+    print(id)
+    x = [1, 2, 3]
+    y = [4, 5, 6]
+    matrix = [x, y]
+    return jsonify({'value':[1,2,3]})
+>>>>>>> c3715d30c99690e0165cdda7bd6c57fdec8146cb
 
 
 @app.route('/simquery', methods=['GET'])
