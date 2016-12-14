@@ -140,9 +140,7 @@ function simPost(){
               console.log("Error storing timeseries");
             }
           });
-    };
-
-}
+};
 
 
 

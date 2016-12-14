@@ -14,10 +14,12 @@
 
 <div class="container">
 
-    <h1>TimeSeries</h1>
-    <div class="row instruct" > Type ID here: </div>
+    <h1>TimeSeries and DataBase</h1>
+    <h2>This is the final showcase of our project. Welcome to playing with Time Series ! </h2>
 
     <ul id="myUL">
+
+    <div class="row instruct" > Type ID here: </div>
 
     <div class="row">
 
@@ -31,42 +33,22 @@
 
             <button type="button" class="btn btn-primary" id="IDSubmit" onclick="getID()">Submit</button>
         </form>
-
-
-
-    <div class="col-sm-12" id="placeholder">
-
-
-    </div>
-
     </div>
 
 
-        <div class="col-sm-12">
-        <pre>
-            Please upload a JSON File with your timeseries
-            and its id as follows:
-                {
-                    "id" : 20,
-                    "value" : [3,4,5],
-                    "time" : [1,2,3]
-
-                }
-        </pre>
+    <div class="col-sm-12" id="placeholder"> </div>
 
 
+    <div class="col-md-12">
+        <div class="row instruct">
+            Upload Your JSON File:
         </div>
-
-
-        <div class="col-sm-12">
-            Upload Your JSON File: 
-              <label class="btn btn-primary btn-file">
-              Browse 
-              <input type="file" id="tsFile" style="display: none;">
-            </label>
-
-            <button type="button" class="btn btn-primary" id="Store" onclick="storeTS()">Show</button>
-        </div>
+        <label class="btn btn-primary btn-file">
+            Browse
+            <input type="file" id="tsFile" style="display: none;">
+        </label>
+        <button type="button" class="btn btn-primary" id="Store" onclick="storeTS()">Show</button>
+    </div>
 
 
 
@@ -129,10 +111,24 @@
         </label>
 
         <button type="button" class="btn btn-primary" id="Store" onclick="simPost()">Show</button>
-   
 
 
+        <div class="col-sm-12">
+            <p>Instructions: </p>
+            <pre>
+            Please upload a JSON File with your timeseries
+            and its id as follows:
+                {
+                    "id" : 20,
+                    "value" : [3,4,5],
+                    "time" : [1,2,3]
 
+                }
+        </pre>
+        </div>
+
+
+</ul>
 </div>
 
 
