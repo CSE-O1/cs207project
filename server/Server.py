@@ -7,6 +7,10 @@ from concurrent.futures import ThreadPoolExecutor
 
 
 class Server:
+    '''
+    A general multi-threaded server that can get and reply client
+    User of this class need to implement process
+    '''
     def __init__(self, port_num):
         self._socket = socket(AF_INET, SOCK_STREAM)
         self._socket.bind(("", port_num))

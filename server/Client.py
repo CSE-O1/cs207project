@@ -4,8 +4,12 @@ from socket import *
 import pickle
 from concurrent.futures import ThreadPoolExecutor
 
-class Client:
 
+class Client:
+    '''
+    A general client that can communicate with Server.
+    User of this class need to implement query
+    '''
     def __init__(self, port_num):
         self._socket = socket(AF_INET, SOCK_STREAM)
         self._socket.connect(('localhost', port_num))
