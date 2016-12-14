@@ -18,6 +18,8 @@ sudo mkdir /home/www
 cd ..
 sudo cp -R cs207project /home/www/
 cd /home/www/cs207project
+sudo chmod 777 vpDB/*
+sudo chmod 777 data/*
 export FLASK_APP=./frontend/view.py
 PYTHONPATH=./ python3 server/DBServer.py 50000 &
 PYTHONPATH=./ python3 -m frontend.view

@@ -1,5 +1,40 @@
 
-//plotTS();
+
+
+$("#tsFile").change(function(event){
+
+    var file = event.target.files[0]; 
+
+    if (file) {
+        var readFile = new FileReader();
+        readFile.onload = function(e) { 
+            var contents = e.target.result;
+            ts_json = JSON.parse(contents);
+            console.log("here");
+            console.log(ts_json["id"]);
+           
+            $.ajax({
+            url: '/timeseries',
+            type: 'POST',
+            data: ts_json,
+            success: function(response){
+                console.log(response);
+                plotTS(response);
+            },
+            error: function(response){
+              console.log("Error storing timeseries");
+            }
+          }); 
+
+        };
+        readFile.readAsText(file);
+    } 
+
+});
+
+
+
+
 function getID(){
     var id = $('#ID').val();
     $.ajax({
@@ -34,43 +69,45 @@ function plotTS(ts){
 //
 // }
 
-function storeTS(){
-    var file = $("#tsFile")[0];
-    console.log(file);
-    var f = file.files[0];
-    // var $.getJSON("test.json", function(json) {
-    //     console.log(json);
-    // });
+// function storeTS(){
+//     var file = $("#tsFile")[0];
+//     console.log(file);
+//     var f = file.files[0];
+//     // var $.getJSON("test.json", function(json) {
+//     //     console.log(json);
+//     // });
 
 
-    console.log(f);
+//     console.log(f);
 
-    var reader = new FileReader();
-    reader.onload = function(e){
+//     var reader = new FileReader();
+//     reader.onload = function(e){
 
-        var ts_JASON = e.target.result;
-        console.log(ts_JASON);
+//         var ts_JASON = e.target.result;
+//         console.log(ts_JASON);
 
-        $.ajax({
-            url: '/timeseries',
-            type: 'POST',
-            data: ts_JASON,
-            success: function(response){
-                console.log(response);
-              plotTS(response);
-            },
-            error: function(error){
-                console.log(response);
-              console.log("Error storing timeseries");
-            }
-          });
+//         $.ajax({
+//             url: '/timeseries',
+//             type: 'POST',
+//             data: ts_JASON,
+//             success: function(response){
+//                 console.log(response);
+//               plotTS(response);
+//             },
+//             error: function(error){
+//                 console.log(response);
+//               console.log("Error storing timeseries");
+//             }
+//           });
 
-        reader.readAsText(file);
-    };
+//         reader.readAsText(file);
+
+
+//     };
 
     
 
-}
+// }
 
 function filter(){
     var level = $('#level_in').val();
