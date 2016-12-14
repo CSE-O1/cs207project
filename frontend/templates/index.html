@@ -1,140 +1,152 @@
-
 <!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="img/harvard.png">
+
     <title>TimeSeries</title>
 
+    <link rel="stylesheet" href="../static/css/font-awesome.min.css">
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css//style.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+
+
 </head>
 <body>
 
-<div class="container">
-
-    <h1>TimeSeries and DataBase</h1>
-    <h2>This is the final showcase of our project. Welcome to playing with Time Series ! </h2>
-
-    <ul id="myUL">
-
-    <div class="row instruct" > Type ID here: </div>
-
-    <div class="row">
-
-        <form class="form-inline pull-left input-sm" id="phaseForm">
-            <div class="form-group">
-                <label for="ID"></label>
-                <input type="text" class="form-control" id="ID" placeholder="">
-
-            </div>
+<!-- ********************** ADD YOUR HTML-ELEMENTS HERE *********************** -->
+<!-- Make sure to include a div-container with the id: 'chart-area' -->
 
 
-            <button type="button" class="btn btn-primary" id="IDSubmit" onclick="getID()">Submit</button>
-        </form>
-    </div>
-
-
-    <div class="col-sm-12" id="placehold"> </div>
-
-
-    <div class="col-md-12">
-    <form class="form-inline pull-left input-sm" id="simGetForm">
-        
-          Upload Your JSON File: 
-        
-        <label class="btn btn-primary btn-file">
-            Upload
-            <input type="file" id="tsFile" style="display: none;">
-        </label>
-        <!-- <button type="button" class="btn btn-primary" id="Store">Show</button> -->
-        </form>
-    </div>
-
-
-
-
-    <!--<div id='editor'></div>-->
-
-        <div class="col-md-12"></div>
-
- <div class="row">
-
-        <form class="form-inline pull-left input-sm" id="searchForm">
-
-    <div class="row instruct">
-        <p><strong>One requirement each time:</strong></p>
-    </div>
-            <div class="form-group">
-                <label for="mean_in">Filter by Mean: </label>
-                <input type="text" class="form-control" id="mean_in" placeholder="0.4-0.5">
-
-            </div>
-            <div class="form-group">
-                <label for="level_in">Filter by Level: </label>
-                <input type="text" class="form-control" id="level_in" placeholder="A,B">
-
-            </div>
-
-
-            <button type="button" class="btn btn-primary" id="filterSubmit" onclick="filter()">Submit</button>
-        </form>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand top" href="#" onclick="location.reload()">CSEO1 - Final project of CS207</a>
         </div>
-        <br> <br>
-        <div id="Meta"> </div>
-
-        <br>  <br>
-
- 
- <div class="row instruct">
-        Input id to find 3 most similar exisiting timeseries.
     </div>
+</nav>
 
-    <div class="row">
-        <form class="form-inline pull-left input-sm" id="simGetForm">
-            <div class="form-group">
-                <label for="simID">ID: </label>
-                <input type="text" class="form-control" id="simID" placeholder="">
+
+<div class = "container">
+    <div class = "row">
+
+
+        <h1>TimeSeries and DataBase</h1>
+        <h2 align="center">This is the final showcase of our project. Welcome to play with Time Series ! </h2>
+
+        <ul id="myUL">
+
+            <div class="row instruct"> Type ID here: </div>
+
+            <div class="row">
+
+                <form class="form-inline pull-left input-sm" id="phaseForm">
+                    <div class="form-group">
+                        <label for="ID"></label>
+                        <input type="text" class="form-control" id="ID" placeholder="">
+
+                    </div>
+
+
+                    <button type="button" class="btn btn-primary" id="IDSubmit" onclick="getID()">Submit</button>
+                </form>
+            </div>
+
+
+            <div class="col-sm-12" id="placehold"> </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-inline pull-left input-sm" id="GetForm">
+                        <i class="fa fa-file" aria-hidden="true"></i>
+                        Upload Your JSON File: </form>
+                    <label class="btn btn-primary btn-file">
+                        Upload
+                        <input type="file" id="tsFile" style="display: none;">
+                    </label>
+                    <!-- <button type="button" class="btn btn-primary" id="Store">Show</button> -->
+                </div>
+            </div>
+
+            <!--<div id='editor'></div>-->
+
+            <div class="col-md-12"></div>
+
+            <div class="row">
+
+                <form class="form-inline pull-left input-sm" id="searchForm">
+
+                    <div class="row instruct" >
+                        <p><strong>One requirement each time:</strong></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mean_in">Filter by Mean: </label>
+                        <input type="text" class="form-control" id="mean_in" placeholder="e.g., 0.4-0.5">
+
+                    </div>
+                    <div class="form-group">
+                        <label for="level_in">Filter by Level: </label>
+                        <input type="text" class="form-control" id="level_in" placeholder="e.g., A,B">
+                    </div>
+
+
+                    <button type="button" class="btn btn-primary" id="filterSubmit" onclick="filter()">Submit</button>
+                </form>
+            </div>
+            <br> <br>
+            <div id="Meta"> </div>
+
+            <br>  <br>
+
+
+            <div class="row instruct">
+                Input id to find 3 most similar existing timeseries.
+            </div>
+
+            <div class="row">
+                <form class="form-inline pull-left input-sm" id="simGetForm">
+                    <div class="form-group">
+                        <label for="simID">ID: </label>
+                        <input type="text" class="form-control" id="simID" placeholder="">
+
+                    </div>
+                    <!--<div class="form-group">-->
+                    <!--<label for="sim_num">Number: </label>-->
+                    <!--<input type="text" class="form-control" id="sim_num" placeholder="">-->
+
+                    <!--</div>-->
+
+                    <button type="button" class="btn btn-primary" id="simGetSubmit" onclick="simGet()">Submit</button>
+                    <!--<button type="button" class="btn btn-primary" id="simGetShow" onclick="simGetShow()">Show</button>-->
+                </form>
+            </div>
+
+
+            <div class="col-sm-12" id="placehold1"> </div>
+
+
+            <!-- <br> <br>  <br>  <br> -->
+            <div class="col-md-12">
+                <div class="row instruct">
+                    Upload TimeSeries JASON file to find the most similar n exising series.
+                </div>
+
+                <label class="btn btn-primary btn-file">
+                    Browse
+                    <input type="file" id="simPostFile" style="display: none;">
+                </label>
+
+                <button type="button" class="btn btn-primary" id="Store" onclick="simPost()">Show</button>
 
             </div>
-            <!--<div class="form-group">-->
-                <!--<label for="sim_num">Number: </label>-->
-                <!--<input type="text" class="form-control" id="sim_num" placeholder="">-->
-
-            <!--</div>-->
-
-            <button type="button" class="btn btn-primary" id="simGetSubmit" onclick="simGet()">Submit</button>
-            <!--<button type="button" class="btn btn-primary" id="simGetShow" onclick="simGetShow()">Show</button>-->
-        </form>
-    </div>
-    <br><br>
-    <div class="row" id=findSimilar></div>
 
 
-
-<div class="col-sm-12" id="placehold1"> </div>
-
-
-<!-- <br> <br>  <br>  <br> -->
-<div class="col-md-12">
- <div class="row instruct">
-        Upload TimeSeries JASON file to find the most similar n exising series.
-    </div>
-
-          <label class="btn btn-primary btn-file">
-          Browse 
-          <input type="file" id="simPostFile" style="display: none;">
-        </label>
-
-        <button type="button" class="btn btn-primary" id="Store" onclick="simPost()">Show</button>
-
-</div>
-
-
-        <div class="col-sm-12">
-            <p>Instructions: </p>
-            <pre>
+            <div class="col-sm-12">
+                <p>Instructions: </p>
+                <pre>
             Please upload a JSON File with your timeseries
             and its id as follows:
                 {
@@ -144,27 +156,38 @@
 
                 }
         </pre>
-        </div>
+            </div>
 
 
-</ul>
+        </ul>
+
+
+
+    </div>
 </div>
 
 
+<div class="container">
+    <hr>
+    <footer>
+        <p>&copy; Final project @CS207 @Harvard.</p>
+    </footer>
+</div>
 
 
+<!-- Load JS libraries: jQuery, bootstrap, D3, D3 Tooltips -->
+<script src="js/sorttable.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/d3.min.js"></script>
+<script src="js/d3-tip.js"></script>
 
+<!-- Completed: Data loading, bar chart rendering -->
+<script src="js/delivery-data.js"></script>
+<script src="js/feedback-data.js"></script>
+<script src="js/barchart.js"></script>
 
-
-
-
-<!-- Load JS libraries: jQuery, bootstrap, D3, D3 tooltip -->
-<script src="../static/js/jquery.js"></script>
-<script src="../static/js/flot.js"></script>
-<script src="../static/js/bootstrap.js"></script>
-
-
-<!-- Your implementation -->
-<script src="../static/js/main.js"></script>
+<!-- ****** TODO: FILTER DATA, DISPLAY BAR CHART & KEY FIGURES ****** -->
+<script src="js/main.js"></script>
 </body>
 </html>

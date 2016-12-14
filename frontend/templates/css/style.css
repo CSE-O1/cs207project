@@ -1,0 +1,66 @@
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+  font-family: 'Lato', arial, sans-serif;
+  background: white;
+  font-size: 16px;
+}
+
+h1{
+  font-family: PilGi, sans-serif;
+  font-weight: bold;
+  color: #743a3a;
+  text-align: center;
+}
+
+.buildName{
+  font-family: Klee, sans-serif;
+  font-weight: bolder;
+  color: #743a3a;
+  font-size: 20px;
+  text-align: center;
+  margin-top:65px;
+  margin-bottom: 65px;
+}
+.my-table-style{
+  color: #743a3a;
+  font-size: 12px;
+}
+
+a.top {
+  background: #743a3a;
+  font-size: 22px;
+  font-weight: bold;
+  margin-right: 12px;
+  color: white;
+}
+
+.section-inner {
+  margin-top: 31px;
+  background: whitesmoke;
+  padding: 20px;
+}
+
+.label-height {
+  text-anchor: end;
+  fill: white;
+}
+
+.label-name {
+  text-anchor: end;
+  color: #743a3a;
+  font-size: 13px;
+}
+
+.building-bar {
+  fill: #743a3a;
+  cursor: pointer;
+}
+
+.wikilink{
+  font-size: 15px;
+  color: darkred;
+  text-decoration:underline;
+  font-style:italic;
+}
+
