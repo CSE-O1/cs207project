@@ -11,7 +11,6 @@ app = Flask(__name__)
 def index():
     return render_template('index.html', title='Home')
 
-
 # @app.route('/timeseries', methods=['GET'])
 # def get_default_ts():
 #     ts_client = DBClient(50000)
@@ -22,17 +21,14 @@ def index():
 @app.route('/timeseries', methods=['GET'])
 def get_timeseries():
     """
-    mean_in = request.args.get('mean_in')
-    std_in = request.args.get('std_in')
-    blarg_in = request.args.get('blarg_in')
-    level_in = request.args.get('level_in')
-    level = request.args.get('level')
+    send back filtered metadata given mean range or levels
     """
     ts_client = DBClient(50000)
     request_string = request.args
     msg = {}
     for arg in request_string:
         arg_vals = parse_query(arg, request_string[arg])
+        #filter by mean in
         if arg == 'mean_in':
             # ts_queried = Timeseries
             # call for response
@@ -42,6 +38,7 @@ def get_timeseries():
             #return_msg should be a metadata array
             length = len(return_msg)
             return jsonify({"length" : length, "mean_in1" : return_msg[0], "mean_in2" : return_msg[-1]})
+        #filter by level
         elif arg == 'level_in':
             msg['type'] = 'level_in'
             msg['level_in'] = arg_vals
@@ -50,7 +47,7 @@ def get_timeseries():
             #be careful, msg['level_in'] is a array
             length = len(return_msg)
             return jsonify({"length" : length, "level_in1" : return_msg[0], "level_in2" : return_msg[-1]})
-
+    #return all metadata
     msg['type'] = 'all'
     return_msg = ts_client.query(msg)
     length = len(return_msg)
@@ -60,6 +57,10 @@ def get_timeseries():
 
 @app.route('/timeseries', methods=['POST'])
 def post_timeseries():
+    """
+    add new timeseries given with key in jason format into database
+    return the timeseries
+    """
     ts_client = DBClient(50000)
     upload_data = request.get_json(force=True)
     if ('id' not in upload_data or 'time' not in upload_data or 'value' not in upload_data):
@@ -83,6 +84,9 @@ def post_timeseries():
 
 @app.route('/timeseries/<id>')
 def timeseries_id(id):
+    """
+    send back metadata and timeseries given in id
+    """
     ts_client = DBClient(50000)
     # call for response
     # given id, return ts data and metadata
@@ -107,6 +111,9 @@ def timeseries_id(id):
 
 @app.route('/simquery/<id>')
 def get_similar_ts(id):
+    """
+    return kth closest timeseries' key to the given id timeseries
+    """
     ts_client = DBClient(50000)
     sim_id = id#request.args.get('id')
     #k = request.args.get('k')
@@ -138,6 +145,9 @@ def get_similar_ts(id):
 
 @app.route('/simquery', methods=['POST'])
 def post_similar_ts():
+    """
+    return kth closest timeseries' key to the upload timeseries dataset
+    """
     ts_client = DBClient(50000)
     input_data = request.get_json(force=True)
     #if 'k' not in input_data:

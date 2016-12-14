@@ -5,6 +5,9 @@ from storagemanager.FileStorageManager import FileStorageManager
 
 class DBClient(Client):
     def __init__(self, port_num):
+        """
+        inite DB Client
+        """
         super(DBClient, self).__init__(port_num)
         self._fsm = FileStorageManager()
 
