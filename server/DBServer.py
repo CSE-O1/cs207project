@@ -54,7 +54,6 @@ class DBServer(Server):
                 ts = fsm.get(msg_id)
                 min_dis, min_db_name, min_ts_file_name = max_similarity_search(ts)
                 result = kth_similarity_search(ts, min_dis, min_db_name, msg_k)
-                print(result)
             except ValueError:
                 pass
         #return nth closest ts data to ts dataset

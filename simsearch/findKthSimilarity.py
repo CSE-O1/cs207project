@@ -26,10 +26,8 @@ def max_similarity_search(input_ts):
     min_db_name = ""
     min_ts_file_name = ""
     for i in range(20):
-        print(i)
         db_name = "vpDB/db_" + str(i) + ".dbdb"
         db = rbtreeDB.connect(db_name)
-        print("one")
         ts_id = db.get(0)
         vp_ts = fsm.get(ts_id)
         std_vp_ts = ss.standardize(vp_ts)

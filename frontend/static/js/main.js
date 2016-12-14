@@ -194,12 +194,12 @@ function simGet(){
         url: '/simquery/' + id,
         type: 'GET',
         success: function(response){
+            console.log(response);
             var res = response["tsid"];
-            var retval = "IDs of similar timeseries: ";
-            for(i in len(res)){
-                retval = retval + res[i] + " ";
-            }
+            var retval = "IDs of top 3 similar timeseries: ";
+            retval = retval + res[0] +" "+ res[1] + " " + res[2];
 
+            console.log(retval);
             $("#findSimilar").html(retval);
         },
         error: function(response){
