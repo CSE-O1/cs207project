@@ -16,8 +16,12 @@ class DBClient(Client):
 
 if __name__ == "__main__":
     ts_client = DBClient(int(sys.argv[1]))
-    if "txt" in sys.argv[2]:
-        return_ts = ts_client.query(sys.argv[2])
+    query={}
+    query['type']='id'
+    query['id']=(sys.argv[2])
+    return_ts = ts_client.query(query)
+    if return_ts['exist']:
+        print(return_ts['tsdata'])
     else:
-        return_ts = ts_client.query(int(sys.argv[2]))
-    print(return_ts)
+        print('Not exist!')
+#    print(return_ts)

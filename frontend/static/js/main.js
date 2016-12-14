@@ -16,10 +16,10 @@ $("#tsFile").change(function(event){
             $.ajax({
             url: '/timeseries',
             type: 'POST',
-            data: ts_json,
+            data: contents,//ts_json,
             success: function(response){
-                console.log(response);
-                plotTS(response);
+                console.log(response["ts"]);
+                plotTS(response["ts"]);
             },
             error: function(response){
               console.log("Error storing timeseries");

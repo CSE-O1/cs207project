@@ -63,6 +63,7 @@ def post_timeseries():
     """
     ts_client = DBClient(50000)
     upload_data = request.get_json(force=True)
+    print("done")
     if ('id' not in upload_data or 'time' not in upload_data or 'value' not in upload_data):
         return json.dumps("Invalid file.")
 
@@ -76,10 +77,14 @@ def post_timeseries():
     msg['type'] = 'ts_data'
     #be careful 'id' may already exist, in this case update this ts
     msg['ts_data'] = [upload_data['id'], upload_data['value'], upload_data['time']]
+    print(msg['ts_data'])
     #return this ts
     return_msg = ts_client.query(msg)
     print("Successfully saved!")
-    return json.dumps(return_msg)
+    #print(return_msg)
+    ts = [[float(t), float(v)] for t, v in zip(return_msg.times, return_msg.values)]
+    print(ts)
+    return jsonify({"ts": ts})
 
 
 @app.route('/timeseries/<id>')
