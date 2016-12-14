@@ -97,7 +97,8 @@ def timeseries_id(id):
     ts_time = list(return_msg['tsdata'].times)
     ts_value = list(return_msg['tsdata'].values)
 
-    return jsonify({"tstimes": ts_time, "tsvalues": ts_value, "metadata": return_msg['metadata']})
+    ts = [[t, v] for t, v in zip(ts_time, ts_value)]
+    return jsonify({"ts": ts, "metadata": return_msg['metadata']})
 
 
 @app.route('/simquery', methods=['GET'])
