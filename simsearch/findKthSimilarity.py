@@ -7,6 +7,7 @@ from storagemanager.FileStorageManager import FileStorageManager
 
 fsm = FileStorageManager()
 
+
 def load_ts_data(file_name):
     "load timeseries data form given file name"
     ts_raw_data = np.loadtxt(file_name, delimiter=' ')
@@ -29,7 +30,6 @@ def max_similarity_search(input_ts):
         db = rbtreeDB.connect(db_name)
         ts_id = db.get(0)
         vp_ts = fsm.get(ts_id)
-        # vp_ts = load_ts_data(ts_data_file_name)
         std_vp_ts = ss.standardize(vp_ts)
         curr_dis = ss.kernel_dis(std_vp_ts, std_comp_ts)
         if min_dis > curr_dis:
@@ -46,16 +46,12 @@ def kth_similarity_search(input_ts, min_dis, min_db_name, k=1):
     """
     db = rbtreeDB.connect(min_db_name)
     keys, ts_ids = db.get_smaller_nodes(2.0 * min_dis)
-    # ts_file_lens = len(ts_file_names)
     kth_ts_list = []
-    # for i in range(ts_file_lens):
     for ts_id in ts_ids:
-        # res_ts = load_ts_data(ts_file_names[i])
         res_ts = fsm.get(ts_id)
         std_res_ts = ss.standardize(res_ts)
         curr_dis = ss.kernel_dis(std_res_ts, input_ts)
         kth_ts_list.append((curr_dis, ts_id))
-        # kth_ts_list.append((curr_dis, ts_file_names[i]))
     # sort in ascending order by distance
     kth_ts_list.sort(key=lambda kv: kv[0])
     # ill situation
