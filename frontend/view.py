@@ -105,7 +105,7 @@ def timeseries_id(id):
     ts = [[t, v] for t, v in zip(ts_time, ts_value)]
     return jsonify({"ts": ts, "metadata": return_msg['metadata']})
 
-@app.route('/simquery')
+@app.route('/simquery/<id>')
 def get_similar_ts(id):
     ts_client = DBClient(50000)
     sim_id = id#request.args.get('id')

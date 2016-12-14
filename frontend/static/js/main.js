@@ -83,7 +83,7 @@ function filter(){
     }
     
 
-    console.log(param);
+    // $("#Meta").html("met"+ "1" + "metw:");
     $.ajax({
         url: '/timeseries',
         type: 'GET',
@@ -92,14 +92,32 @@ function filter(){
             if(response=="Find nothing!"){
                  $("#Meta").html(response);
             }
-            //metaData?
-            var retval;
-            for (i in response.length){
 
-                for (key in response[i]){
-                     retval = retval+ key + ": " + filters[i][key] + "<br>";
-                }
+            var s = "";
+            for(i in response["metadata_1"]) {
+                s = s + " " +i + ": " +  response["metadata_1"][i];
             }
+
+            s = s + " ... ";
+
+            for(i in response["metadata_2"]) {
+                s = s + " " + i + ": " +  response["metadata_2"][i];
+            }
+
+            //metaData?
+            
+            // for (i in response.length){
+
+            //     for (key in response[i]){
+            //          retval = retval+ key + ": " + filters[i][key] + "<br>";
+            //     }
+            // }
+
+
+            var retval =  "Total Number: " + response["length"] +
+            "  Timeseries: " + s;
+
+
             $("#Meta").html(retval);
         },
         error: function(response){
