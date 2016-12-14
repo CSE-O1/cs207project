@@ -38,10 +38,105 @@
 
 
     </div>
+
     </div>
 
 
+        <div class="col-sm-12">
+        <pre>
+            Please upload a JSON File with your timeseries
+            and its id as follows:
+                {
+                    "id" : 20,
+                    "value" : [3,4,5],
+                    "time" : [1,2,3]
+
+                }
+        </pre>
+
+
+        </div>
+
+
+        <div class="col-sm-12">
+            Upload Your JSON File: 
+              <label class="btn btn-primary btn-file">
+              Browse 
+              <input type="file" id="tsFile" style="display: none;">
+            </label>
+
+            <button type="button" class="btn btn-primary" id="Store" onclick="storeTS()">Show</button>
+        </div>
+
+
+
+
+    <!--<div id='editor'></div>-->
+
+        <div class="col-md-12"></div>
+
+ <div class="row">
+        <form class="form-inline pull-left input-sm" id="searchForm">
+            <div class="form-group">
+                <label for="mean_in">Filter by Mean: </label>
+                <input type="text" class="form-control" id="mean_in" placeholder="">
+
+            </div>
+            <div class="form-group">
+                <label for="level_in">Filter by Level: </label>
+                <input type="text" class="form-control" id="level_in" placeholder="">
+
+            </div>
+
+
+            <button type="button" class="btn btn-primary" id="filterSubmit" onclick="filter()">Submit</button>
+        </form>
+        </div>
+        <br> <br>  <br>  <br>
+
+ <div class="row instruct">
+        Input id to find most similar n exising series.
+    </div>
+
+    <div class="row">
+        <form class="form-inline pull-left input-sm" id="simGetForm">
+            <div class="form-group">
+                <label for="sim_id">ID: </label>
+                <input type="text" class="form-control" id="sim_id" placeholder="">
+
+            </div>
+            <div class="form-group">
+                <label for="sim_num">Number: </label>
+                <input type="text" class="form-control" id="sim_num" placeholder="">
+
+            </div>
+
+            <button type="button" class="btn btn-primary" id="simGetSubmit" onclick="simGet()">Submit</button>
+            <button type="button" class="btn btn-primary" id="simGetShow" onclick="simGetShow()">Show</button>
+        </form>
+        </div>
+
+
+
+<br> <br>  <br>  <br>
+ <div class="row instruct">
+        Upload TimeSeries JASON file to find the most similar n exising series.
+    </div>
+
+          <label class="btn btn-primary btn-file">
+          Browse 
+          <input type="file" id="simPostFile" style="display: none;">
+        </label>
+
+        <button type="button" class="btn btn-primary" id="Store" onclick="simPost()">Show</button>
+   
+
+
+
 </div>
+
+
+
 
 
 
