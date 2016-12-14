@@ -5,6 +5,7 @@ from server.DBClient import DBClient
 
 app = Flask(__name__)
 
+ts_client = DBClient(50000)
 
 @app.route('/')
 @app.route('/index')
@@ -12,11 +13,11 @@ def index():
     return render_template('index.html', title='Home')
 
 
-@app.route('/timeseries', methods=['GET'])
-def get_default_ts():
-    ts_client = DBClient(50000)
-    return_ts = ts_client.query(31)
-    return make_response(str(return_ts))
+# @app.route('/timeseries', methods=['GET'])
+# def get_default_ts():
+#     ts_client = DBClient(50000)
+#     return_ts = ts_client.query(31)
+#     return make_response(str(return_ts))
 
 
 @app.route('/timeseries', methods=['GET'])
@@ -34,7 +35,14 @@ def get_timeseries():
         if arg == 'mean_in':
             # ts_queried = Timeseries
             # call for response
-            pass
+            msg = {}
+            msg['type'] = 'mean_in'
+            msg['min'] = arg[0]
+            msg['max'] = arg[1]
+            return_msg = ts_client.query(msg)
+            #do something on return_msg
+            
+
         elif arg == 'level_in':
             # call for response
             pass
