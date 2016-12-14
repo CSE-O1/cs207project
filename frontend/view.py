@@ -65,17 +65,12 @@ def post_timeseries():
 @app.route('/timeseries/<id>')
 def timeseries_id(id):
     # testcases for Amy
-    # x = [1, 2, 3]
-    # y = [4, 5, 6]
-    # matrix = [x, y]
-    # return jsonify(matrix)
-
-
-    # call for response
-    # given id, return ts data and metadata
-    ts = "ts"
-    met = "met"
-    return jsonify({"timeseries": ts, "metadata": met})
+    #response = communicationWithDB(id) id is DB's key
+    print(id)
+    x = [1, 2, 3]
+    y = [4, 5, 6]
+    matrix = [x, y]
+    return jsonify({'value':[1,2,3]})
 
 
 @app.route('/simquery', methods=['GET'])
