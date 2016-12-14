@@ -111,7 +111,7 @@ def get_similar_ts():
     # return nth closest ts data to ts with sim_id
     msg = {}
     msg['type'] = 'ss_id'
-    msg['id'] = id
+    msg['id'] = sim_id
     msg['k'] = k
     #return_msg should be a ts array
     #[ts1, ts2, ... , tsn]
