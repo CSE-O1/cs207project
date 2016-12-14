@@ -5,7 +5,7 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 class postgresAPI:
     """
-    postgresAPI to create tabel and query in database
+    postgresAPI to create table and query in database
     """
 
     def __init__(self, host, dbname, user, password, table):
