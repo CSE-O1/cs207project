@@ -3,9 +3,10 @@ import numbers
 import reprlib
 import collections
 import math
-from TimeSeries import TimeSeries
-from Interface import SizedContainerTimeSeriesInterface
-from Lazy import lazy, LazyOperation
+from timeseries.TimeSeries import TimeSeries
+from timeseries.TSInterface import SizedContainerTimeSeriesInterface
+from timeseries.Lazy import lazy, LazyOperation
+
 
 class ArrayTimeSeries(SizedContainerTimeSeriesInterface):
     """
@@ -73,7 +74,7 @@ class ArrayTimeSeries(SizedContainerTimeSeriesInterface):
         Add two ArrayTimeSeries' values at each time point
 
         other: another ArrayTimeSeries instance
-        Return a new ArrayTimeSeries instance with the values being sum of both timeseries‘ values
+        Return a new ArrayTimeSeries instance with the values being sum of both timeseries values
         Raise "TypeError" when other is not an instance of ArrayTimeSeries class,
         and raise "ValueError" when self's and other's times are not element-wise equal within a tolerance
         """ 

@@ -3,8 +3,8 @@ import numbers
 import collections
 import math
 import numpy as np
-from Lazy import lazy, LazyOperation
-from Interface import SizedContainerTimeSeriesInterface
+from timeseries.Lazy import lazy, LazyOperation
+from timeseries.TSInterface import SizedContainerTimeSeriesInterface
 
 class TimeSeries(SizedContainerTimeSeriesInterface):
     """
