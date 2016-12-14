@@ -18,18 +18,18 @@ All 3 of these talk to the REST HTTP server. The whole project was installed on 
 [![Build Status](https://travis-ci.org/CSE-O1/cs207project.svg?branch=master)](https://travis-ci.org/CSE-O1/cs207project)
 
 ####File folder
-/cs207rbtree red black tree, can be installed separately
-/frontend Web UI
-/scripts scripts to generate database
-/server server related
-/simsearch similarity search
-/storagemanager file storage manager
-/timseries time series
+- **/cs207rbtree** red black tree, can be installed separately
+- **/frontend** Web UI
+- **/scripts** scripts to generate database
+- **/server** server related
+- **/simsearch** similarity search
+- **/storagemanager** file storage manager
+- **/timseries** time series
 
 ####Website on Amazon AWS
 http://54.237.247.237/
 
 ####Installation
-/setup.sh script to install required packages on an empty EC2 virtual machine
-/start_server.sh script to setup project on an EC2 virtual machine
+- **/setup.sh** script to install required packages on an empty EC2 virtual machine
+- **/start_server.sh** script to setup project on an EC2 virtual machine
 
