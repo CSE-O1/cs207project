@@ -5,7 +5,6 @@ import numpy as np
 import random
 from server.pgDB import postgresAPI
 from storagemanager.FileStorageManager import FileStorageManager
-from concurrent import futures
 
 fsm = FileStorageManager()
 

@@ -14,15 +14,16 @@ function getID(){
         }
     });
    
-
-    
-
 }
+
 
 function plotTS(ts){
 
 
-    $.plot($("#placeholder"), [ ts ] );
+
+
+    $.plot($("#placehold"), [ ts ] );
+
 
 
 

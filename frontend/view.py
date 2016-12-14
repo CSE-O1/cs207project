@@ -85,26 +85,28 @@ def timeseries_id(id):
     msg['type'] = 'id'
     msg['id'] = id
 
-    print(id);
-    print(msg);
     #return_msg format:
     #return_msg = { 'exist': 1 or 0,
     #               'tsdata': xxxx,
     #               'metadata': xxxx}
     # if this id does not exit, return
     return_msg = ts_client.query(msg)
-    if return_msg['exist'] == "no":
+    if return_msg['exist'] == 0:
         return jsonify("Timeseries id does not exist!")
 
-    return jsonify({"tsdata": return_msg['tsdata'], "metadata": return_msg['metadata']})
+    ts_time = list(return_msg['tsdata'].times)
+    ts_value = list(return_msg['tsdata'].values)
+
+    ts = [[t, v] for t, v in zip(ts_time, ts_value)]
+    return jsonify({"ts": ts, "metadata": return_msg['metadata']})
 
 
 @app.route('/simquery', methods=['GET'])
 def get_similar_ts():
     sim_id = request.args.get('id')
-    k = request.args.get('k')
-    if k is None:
-        k = 5
+    #k = request.args.get('k')
+    #if k is None:
+    k = 3
     # call for response
     # return nth closest ts data to ts with sim_id
     msg = {}
@@ -116,15 +118,25 @@ def get_similar_ts():
     return_msg = ts_client.query(msg)
     if len(return_msg) == 0:
         return jsonify("Find nothing!")
-    return jsonify({"similarity" : return_msg})
+
+    tst1 = list(return_msg[0].times)
+    tsv1 = list(return_msg[0].values)
+
+    tst2 = list(return_msg[1].times)
+    tsv2 = list(return_msg[1].values)
+
+    tst3 = list(return_msg[2].times)
+    tsv3 = list(return_msg[2].values)
+
+    return jsonify({"tst1": tst1, "tsv1": tsv1, "tst2": tst2, "tsv2": tsv2, "tst3": tst3, "tsv3": tsv3})
 
 
 @app.route('/simquery', methods=['POST'])
 def post_similar_ts():
     input_data = request.get_json(force=True)
-    if 'k' not in input_data:
-        input_data['k'] = 5
-    k = input_data['k']
+    #if 'k' not in input_data:
+    #    input_data['k'] = 5
+    k = 3
     # call for response
     # return nth closest ts data to input_data
     msg = {}
@@ -136,4 +148,15 @@ def post_similar_ts():
     return_msg = ts_client.query(msg)
     if len(return_msg) == 0:
         return jsonify("Find nothing!")
-    return jsonify({"similarity_id": return_msg})
+
+    tst1 = list(return_msg[0].times)
+    tsv1 = list(return_msg[0].values)
+
+    tst2 = list(return_msg[1].times)
+    tsv2 = list(return_msg[1].values)
+
+    tst3 = list(return_msg[2].times)
+    tsv3 = list(return_msg[2].values)
+
+    return jsonify({"tst1": tst1, "tsv1": tsv1, "tst2": tst2, "tsv2": tsv2, "tst3": tst3, "tsv3": tsv3})
+

@@ -261,21 +261,21 @@ class SizedContainerTimeSeriesInterface(TimeSeriesInterface):
         """
         return val in self._value
 
-
+    @property
     def values(self):
         """
         Return self._value
         """
         return self._value
 
-
+    @property
     def times(self):
         """
         Return self._time
         """
         return self._time
 
-
+    @property
     def items(self):
         """
         Return self._timeseries
