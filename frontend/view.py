@@ -85,7 +85,7 @@ def timeseries_id(id):
     msg['type'] = 'id'
     msg['id'] = id
     #return_msg format:
-    #return_msg = { 'exist': "yes" or "no",
+    #return_msg = { 'exist': 1 or 0,
     #               'tsdata': xxxx,
     #               'metadata': xxxx}
     # if this id does not exit, return
@@ -99,15 +99,15 @@ def timeseries_id(id):
 @app.route('/simquery', methods=['GET'])
 def get_similar_ts():
     sim_id = request.args.get('id')
-    n = request.args.get('n')
-    if n is None:
-        n = 5
+    k = request.args.get('k')
+    if k is None:
+        k = 5
     # call for response
     # return nth closest ts data to ts with sim_id
     msg = {}
     msg['type'] = 'ss_id'
     msg['id'] = id
-    msg['n'] = n
+    msg['k'] = k
     #return_msg should be a ts array
     #[ts1, ts2, ... , tsn]
     return_msg = ts_client.query(msg)
@@ -119,15 +119,15 @@ def get_similar_ts():
 @app.route('/simquery', methods=['POST'])
 def post_similar_ts():
     input_data = request.get_json(force=True)
-    if 'n' not in input_data:
-        input_data['n'] = 5
-    n = input_data['n']
+    if 'k' not in input_data:
+        input_data['k'] = 5
+    k = input_data['k']
     # call for response
     # return nth closest ts data to input_data
     msg = {}
     msg['type'] = 'ss_tsdata'
-    msg['tsdata'] = input_data
-    msg['n'] = n
+    msg['tsdata'] = input_data['tsdata']
+    msg['k'] = k
     # return_msg should be a id(ts) array
     # [id1, id2, ... , idn]
     return_msg = ts_client.query(msg)
