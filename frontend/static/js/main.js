@@ -81,13 +81,17 @@ function filter(){
     }else{
         param = {"level_in" : level};
     }
-   
+    
+
     console.log(param);
     $.ajax({
         url: '/timeseries',
         type: 'GET',
         data: param,
         success: function(response){
+            if(response=="Find nothing!"){
+                 $("#Meta").html(response);
+            }
             //metaData?
             var retval;
             for (i in response.length){
