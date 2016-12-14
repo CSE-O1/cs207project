@@ -38,12 +38,10 @@ class DBServer(Server):
             msg_k = dat['k']
             result = []
             try:
-                print(msg_id)
                 ts = fsm.get(msg_id)
-                print(ts)
                 min_dis, min_db_name, min_ts_file_name = max_similarity_search(ts)
-                print(min_dis)
                 result = kth_similarity_search(ts, min_dis, min_db_name, msg_k)
+                print(result)
             except ValueError:
                 pass
         elif query == "ss_tsdata":
