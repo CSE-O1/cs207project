@@ -8,6 +8,9 @@
 [![Build Status](https://travis-ci.org/CSE-O1/cs207project.svg?branch=master)](https://travis-ci.org/CSE-O1/cs207project)
 
 ###Introduction
+
+<img src="./CS207_architecture.png" alt="architecture" width="520" height="200">
+
 This is a final project repo for Harvard CS207 system development course.
 
 Implemented 3 database like systems in this project:
